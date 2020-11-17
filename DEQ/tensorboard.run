@@ -1,0 +1,3 @@
+## example on how to run tensorboard
+tensorboard --logdir=/home/simon/projects/DSGE_DEQ/src/sudden_stop/runs/nkdsge/2020-07-08/19-36-57
+

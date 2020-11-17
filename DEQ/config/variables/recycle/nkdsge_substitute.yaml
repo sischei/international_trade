@@ -1,0 +1,250 @@
+states:
+  #exogenous state variables
+  - name: Ax
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 0.888
+        maxval: 1.127   
+  - name: Gx
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 0.127
+        maxval: 0.177   
+  - name: Zx
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 0.706
+        maxval: 1.416   
+  - name: nux
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 0.787
+        maxval: 1.270   
+  - name: psix
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 2.14
+        maxval: 16.82   
+  - name: mx 
+    init:
+      distribution: uniform
+      kwargs:
+        minval: -0.0078
+        maxval: 0.0078   
+  #endogenous state variables
+  - name: Kx
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 6.7
+        maxval: 8.2 
+  - name: Cx
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 0.37
+        maxval: 0.45  
+  - name: Ix
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 0.13
+        maxval: 0.24    
+  - name: Yx
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 0.67
+        maxval: 0.82   
+  - name: wx
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 1.07
+        maxval: 1.31    
+  - name: nupx
+    init:
+      distribution: uniform
+      kwargs:
+        minval: 1.0
+        maxval: 1.002   
+  - name: pix
+    init:
+      distribution: uniform
+      kwargs:
+        minval: -0.01
+        maxval: 0.02 
+  - name: ix
+    init:
+      distribution: uniform
+      kwargs:
+        minval: -0.005
+        maxval: 0.025     
+policies:
+  - name: lambday
+    bounds: 
+      #lower: 0.78
+      #upper: 4.46
+      penalty_lower: 10.0
+      penalty_upper: 10.0
+    activation: tf.nn.softplus      
+    #activation: implied                     
+  - name: muy
+    bounds: 
+      #lower: 0.78
+      #upper: 4.46
+      penalty_lower: 10.0
+      penalty_upper: 10.0  
+    activation: tf.nn.softplus      
+    #activation: implied                     
+#rescaled equation      
+  - name: Cy
+    bounds: 
+      #lower: 1e-6
+      #upper: 0.04
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus
+    #activation: implied                                  
+  - name: piy
+    bounds: 
+      #lower: -0.1
+      #upper: 0.11
+      penalty_lower: 10.0
+      penalty_upper: 10.0    
+    #activation: implied                     
+  - name: pihashy
+    bounds: 
+      #lower: -0.085
+      #upper:  0.12
+      penalty_lower: 10.0
+      penalty_upper: 10.0  
+    #activation: implied                           
+  - name: Ry
+    bounds: 
+      #lower: -0.07
+      #upper: 0.13   
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    #activation: implied                                 
+  - name: uy
+    bounds: 
+      #lower: 0.4
+      #upper: 1.6
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    ##activation: implied
+    activation: tf.nn.softplus    
+#rescaled equation
+  - name: Iy
+    bounds: 
+      #lower: 0.4
+      #upper: 1.6
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied                                       
+#non-rescaled equation
+  #- name: Iy
+    #bounds: 
+      #lower: 0.01
+      ##upper: 10.0      
+  - name: wy
+    bounds: 
+      #lower: 0.47
+      #upper: 1.91
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied                                             
+  - name: whashy
+    bounds: 
+      #lower: 0.47
+      #upper: 1.92
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied   
+  - name: h1y
+    bounds: 
+      #lower: 0.6
+      #upper: 2.95
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied     
+  - name: h2y
+    bounds: 
+      #lower: 1.02
+      #upper: 5.00
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied                                                               
+  - name: Ny
+    bounds: 
+      #lower: 0.17
+      #upper: 0.71 
+      penalty_lower: 10.0
+      penalty_upper: 10.0   
+    #activation: implied  
+    activation: tf.nn.softplus                                                                             
+  - name: Ky
+    bounds: 
+      #lower: 1.7
+      #upper: 15.1    
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied                                                                                 
+  - name: mcy
+    bounds: 
+      #lower: 0.29
+      #upper: 1.17    
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied                                                                                       
+  - name: x1y
+    bounds: 
+      #lower: 2.14
+      #upper: 8.55  
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied                                                                                             
+  - name: x2y
+    bounds: 
+      #lower: 2.64
+      #upper: 10.56  
+      penalty_lower: 10.0
+      penalty_upper: 10.0
+    activation: tf.nn.softplus      
+    #activation: implied                                                                                                                                                                                                        
+  - name: nupy
+    bounds: 
+      #lower: 0.995
+      #upper: 1.015  
+      penalty_lower: 10.0
+      penalty_upper: 10.0  
+    #activation: implied                                                         
+definitions:
+  - name: delta_1
+  - name: Khaty
+    bounds: 
+      #lower: 2.0
+      #upper: 13.95  
+      penalty_lower: 10.0
+      penalty_upper: 10.0 
+    activation: tf.nn.softplus      
+    #activation: implied  
+  - name: iy
+  - name: Yy 
+    activation: tf.nn.softplus      
+    #activation: implied  
+  

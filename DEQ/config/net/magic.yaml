@@ -1,0 +1,22 @@
+layers:
+  - hidden:
+     units: 64
+     type: dense
+     activation: swish
+     init_scale: 0.1
+  - hidden:
+     units: 32
+     type: dense
+     activation: swish
+     init_scale: 0.1
+  - hidden:
+     units: 16
+     type: dense
+     activation: swish
+     init_scale: 0.1      
+  - output:
+     type: dense
+     activation: linear
+     init_scale: 0.1
+net_initializer_mode: fan_in
+net_initializer_distribution: truncated_normal

@@ -1,0 +1,105 @@
+seed: 42
+STARTING_POINT: NEW
+CHECKPOINT_INTERVAL: 10
+MAX_TO_KEEP_NUMBER: 10
+MODEL_NAME: analytic
+initialize_each_episode: false
+error_filename: error_file.txt
+enable_check_numerics: false
+constants:
+  alpha: 0.3
+  beta: 0.7
+  gamma: 1.0
+  eq_scale: 0.01
+layers:
+- hidden:
+    units: 100
+    type: dense
+    activation: relu
+    init_scale: 0.1
+    batch_normalize:
+      momentum: 0.99
+- hidden:
+    units: 50
+    type: dense
+    activation: relu
+    init_scale: 0.1
+    dropout_rate: 0.01
+- output:
+    type: dense
+    activation: linear
+    init_scale: 0.1
+net_initializer_mode: fan_avg
+net_initializer_distribution: truncated_normal
+optimizer: Adam
+learning_rate: 1.0e-05
+clipvalue: 1.0
+N_sim_batch: 1000
+N_episode_length: 2
+N_epochs_per_episode: 1
+N_minibatch_size: 100
+N_episodes: 50000
+keras_precision: float32
+expectation_type: pseudo_random
+expectation_pseudo_draws: 10
+states:
+- name: TFP
+- name: depr
+- name: K2
+- name: K3
+- name: K4
+- name: K5
+- name: K6
+- name: K_total
+- name: r
+- name: w
+- name: 'Y'
+- name: fw2
+- name: fw3
+- name: fw4
+- name: fw5
+- name: fw6
+policies:
+- name: a1
+  bounds:
+    lower: 1.0e-05
+- name: a2
+  bounds:
+    lower: 1.0e-05
+- name: a3
+  bounds:
+    lower: 1.0e-05
+- name: a4
+  bounds:
+    lower: 1.0e-05
+- name: a5
+  bounds:
+    lower: 1.0e-05
+definitions:
+- name: c1
+  bounds:
+    lower: 0.0001
+- name: c2
+  bounds:
+    lower: 0.0001
+- name: c3
+  bounds:
+    lower: 0.0001
+- name: c4
+  bounds:
+    lower: 0.0001
+- name: c5
+  bounds:
+    lower: 0.0001
+- name: c6
+  bounds:
+    lower: 0.0001
+- name: K_total
+  bounds:
+    lower: 0.0001
+- name: K_total_next
+  bounds:
+    lower: 0.0001
+- name: r
+- name: w
+- name: 'Y'

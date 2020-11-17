@@ -1,0 +1,15 @@
+layers:
+  - hidden:
+     units: 500
+     type: dense
+     activation: relu
+     init_scale: 0.2
+  - hidden:
+     units: 500
+     type: dense
+     activation: relu
+     init_scale: 0.2
+  - output:
+     type: dense
+     activation: linear
+     init_scale: 0.2
