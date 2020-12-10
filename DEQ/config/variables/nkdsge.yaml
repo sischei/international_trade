@@ -1,0 +1,147 @@
+states:
+  #exogenous state variables
+  - name: Ax
+    bounds: 
+      lower: 0.8877
+      upper: 1.1265   
+  - name: Gx
+    bounds: 
+      lower: 0.1273
+      upper: 0.1768   
+  - name: Zx
+    bounds: 
+      lower: 0.7061
+      upper: 1.4162   
+  - name: nux
+    bounds: 
+      lower: 0.7873
+      upper: 1.2702   
+  - name: psix
+    bounds: 
+      lower: 2.1405
+      upper: 16.8184   
+  - name: mx
+    bounds: 
+      lower: -0.01
+      upper: 0.01   
+  #endogenous state variables
+  - name: Kx
+    bounds: 
+      lower: 6.7251
+      upper: 8.2196  
+  - name: Cx
+    bounds: 
+      lower: 0.3703
+      upper: 0.4526   
+  - name: Ix
+    bounds: 
+      lower: 0.1308
+      upper: 0.2429     
+  - name: Yx
+    bounds: 
+      lower: 0.6731
+      upper: 0.8226    
+  - name: wx
+    bounds: 
+      lower: 1.0722
+      upper: 1.3104    
+  - name: nupx
+    bounds: 
+      lower: 1.0001
+      upper: 1.0022    
+  - name: pix
+    bounds: 
+      lower: -0.0100
+      upper: 0.0200  
+  - name: ix
+    bounds: 
+      lower: -0.0049
+      upper: 0.0251        
+policies:
+  - name: lambday
+    bounds: 
+      lower: 2.0965
+      upper: 3.1447
+  - name: muy
+    bounds: 
+      lower: 2.0965
+      upper: 3.1447
+  - name: Cy
+    bounds: 
+      lower: 0.3292
+      upper: 0.4938
+  - name: iy
+    bounds: 
+      lower: -0.0199
+      upper: 0.0401 
+  - name: piy
+    bounds: 
+      lower: -0.0250
+      upper: 0.0350 
+  - name: pihashy
+    bounds: 
+      lower: 0.0476
+      upper: 1.9909   
+  - name: Ry
+    bounds: 
+      lower: 0.0000
+      upper: 0.0600   
+      penalty_lower: 100000000.0
+  - name: uy
+    bounds: 
+      lower: 0.7000
+      upper: 1.3000     
+  - name: Iy
+    bounds: 
+      lower: 0.1046
+      upper: 0.2914
+  - name: wy
+    bounds: 
+      lower: 0.8339
+      upper: 1.5487
+  - name: whashy
+    bounds: 
+      lower: 0.8378
+      upper: 1.5559
+  - name: h1y
+    bounds: 
+      lower: 1.1697
+      upper: 2.1724  
+  - name: h2y
+    bounds: 
+      lower: 1.9909
+      upper: 3.6973   
+  - name: Ny
+    bounds: 
+      lower: 0.3076
+      upper: 0.5713 
+  - name: Khaty
+    bounds: 
+      lower: 5.2306
+      upper: 9.7141  
+  - name: Ky
+    bounds: 
+      lower: 5.2306
+      upper: 9.7141    
+  - name: mcy
+    bounds: 
+      lower: 0.5092
+      upper: 0.9456    
+  - name: x1y
+    bounds: 
+      lower: 3.7429
+      upper: 6.9511  
+  - name: x2y
+    bounds: 
+      lower: 4.6206
+      upper: 8.5811   
+  - name: Yy
+    bounds: 
+      lower: 0.5235
+      upper: 0.9722    
+  - name: nupy
+    bounds: 
+      lower: 0.9972
+      upper: 1.0110   
+definitions:
+  - name: delta_1

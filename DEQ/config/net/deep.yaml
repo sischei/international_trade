@@ -1,0 +1,20 @@
+layers:
+  - hidden:
+     units: 5
+     type: dense
+     activation: relu
+  - hidden:
+     units: 5
+     type: dense
+     activation: relu
+  - hidden:
+     units: 5
+     type: dense
+     activation: relu
+  - hidden:
+     units: 5
+     type: dense
+     activation: relu
+  - output:
+     type: dense
+     activation: linear
