@@ -1,0 +1,255 @@
+\documentclass[11pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{natbib}
+\usepackage{appendix}
+\usepackage{amsfonts}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{theorem}
+\usepackage{setspace}
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage{makecell}
+\usepackage{newpxtext,newpxmath}
+\usepackage{caption}
+\usepackage{xcolor}
+\renewcommand{\baselinestretch}{1.5}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\setlength{\textwidth}{7.2in}
+\setlength{\evensidemargin}{0in}
+\setlength{\oddsidemargin}{-0.3in}
+\setlength{\textheight}{9.2in}
+\setlength{\topmargin}{-.45in}
+
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\LB}{\text{LB}}
+\newcommand{\UB}{\text{UB}}
+\newcommand{\Lagr}{\mathop{\mathcal{L}}}
+\newcommand{\cl}[1]{{\color{orange}{#1}}}
+\newcommand{\st}[1]{{\color{green}{#1}}}
+\newcommand{\stnext}[1]{{\color{magenta}{#1}}}
+\newcommand{\clnext}[1]{{\color{blue}{#1}}}
+\newcommand{\Ex}[2]{\mathbb{E}_{#1}\left[#2\right]}
+
+\title{ NOTES }
+\author{Thomas M. Mertens\thanks{\textbf{Federal Reserve Bank of San Francisco,} 101 Market Street, Mailstop 1130, San Francisco, CA 94105; Thomas.Mertens@sf.frb.org}}
+\date{\today}
+
+\begin{document}
+%\maketitle
+
+\section{Variables}
+
+\begin{enumerate}
+	\item The set of endogenous state variables has the following elements: \\
+	 $K_t$\\
+	 CODE: Kx (\emph{code variables: states end with 'x', controls with 'y'})
+	\item The set of exogenous state variables has the following elements: \\
+	 $T^D_{n,t}$, $\phi_{n,t}$, $L_{n,t}$, $d_{ni,t}$, $\chi_{n,t}$\\
+	 CODE: ...
+	 \item The set of control variables has the following elements: \\
+	 $A_{n, t}^{D}$, ...\\
+	 CODE:  \\
+\end{enumerate}
+
+
+
+\section{Equations}
+
+legend: \st{states in green} (given), \cl{controls in orange} (given by policy guess from current states), \stnext{next period's exogenous states in magenta} (to be integrated over), and \clnext{next period's controls in blue} (given by policy guess at next period's states), parameters are black\vspace{5mm}
+
+\noindent $N$ equations. Sectoral productivity
+\begin{equation}
+\cl{A_{n, t}^{D}}=(1 / \gamma)\left(\st{T_{n, t}^{D}}\right)^{1 / \theta}
+\end{equation}
+The $\cl{A^D_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{A^D_t}}$.
+
+\noindent $N$ equations. Service sector output
+\begin{equation}
+0 =\cl{Y^S_{n,t}} - \omega_n \st{\phi_{n,t}}
+\end{equation}
+The $\cl{Y^S_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{Y^S_t}}$.
+
+\noindent $N$ equations. Rental rate
+\begin{equation}
+0 =\cl{Y_{n,t}} - \cl{Y^D_{n,t}} - \cl{Y^S_{n,t}}
+\end{equation}
+The $\cl{Y_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{Y_t}}$ and the $\cl{Y^D_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{Y^D_t}}$.
+
+\noindent $N$ equations. Wage
+\begin{equation}
+0 =\cl{w_{n,t}} - \beta^L \frac{\cl{Y_{n,t}}}{\st{L_{n,t}}}
+\end{equation}
+The $\cl{w_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{w_t}}$.
+
+
+\noindent $N$ equations. Rental rate
+\begin{equation}
+  0 = \cl{r_{n,t}} - \beta^K \frac{\cl{Y_{n,t}}}{\st{K_{n,t}}}
+\end{equation}
+The $\cl{r_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{r_t}}$.
+
+\noindent $N$ equations. The cost of a bundle of factors
+\begin{equation}
+0 = \cl{b_{n,t}} - \cl{w_{n,t}}^{\beta^L}\cl{r_{n,t}}^{\beta^K}
+\end{equation}
+The $\cl{b_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{b_t}}$.
+
+
+\noindent $N$ equations. The price index of the durable (tradable) sector
+\begin{equation}
+0 = \cl{p^D_{n,t}} - \left(\sum^{N}_{i=1} \left( \frac{\cl{b_{i,t}} \st{d_{ni,t}}}{\cl{A_{i,t}^D}} \right)^{-\theta} \right)^{-\frac{1}{\theta}}
+\end{equation}
+$N$ equations per tradable sector and country (including the relation wrt to itself). As we model only one tradable sector per country, this boils down to $N \times N$ equations. The fraction of durable goods that country $n$ obtains as imports from country $i$
+\begin{equation}
+0 = \cl{\pi^D_{ni,t}} - \left( \frac{\cl{b_{i,t}} \st{d_{ni,t}}}{\cl{p_{n,t}^D} \cl{A_{i,t}^D}} \right)^{-\theta}
+\end{equation}
+These fractions imported form an $N \times N$ matrix $\mathbf{\cl{\Pi_t}}$.
+
+\noindent $N$ equations. The absorption of the durable good in a country 
+\begin{equation}
+0 = \mathbf{\cl{\Pi_t}}^{-1} \mathbf{\cl{Y^D_t}} - \mathbf{\cl{X^D_t}}
+\end{equation}
+
+\noindent $N$ equations. The law of motion of capital
+\begin{equation}
+0 = \cl{K_{n,t+1}} - \st{\chi_{n,t}} \left( \frac{\cl{X_{n,t}^D}}{\cl{p_{n,t}^D}} \right) \st{K_{n,t}}^{1-\alpha} + \left(1 - \delta\right) \st{K_{n,t}}
+\end{equation}
+
+\noindent $N$ equations. The Euler equations
+\begin{equation}
+0 = \frac{\cl{p_{n, t}^{D}}}{\alpha \st{\chi_{n, t}}}\left(\frac{\cl{X_{n, t}^{D}}}{\cl{p_{n, t}^{D}} \st{K_{n, t}}}\right)^{1-\alpha} - \rho \frac{\cl{p_{n, t+1}^{D}}}{\alpha \st{\chi_{n, t+1}}}\left(\frac{\cl{X_{n, t+1}^{D}}}{\cl{p_{n, t+1}^{D}} \cl{K_{n, t+1}}}\right)^{1-\alpha}\left[\st{\chi_{n, t+1}}(1-\alpha)\left(\frac{\cl{X_{n, t+1}^{D}}}{\cl{p_{n, t+1}^{D}} \cl{K_{n, t+1}}}\right)^{\alpha}+(1-\delta)\right]+\rho \cl{r_{n, t+1}}
+\end{equation}
+
+
+\section{Laws of motion}
+
+\subsection{LoM for exogenous states}
+
+\noindent $N$ equations
+\begin{equation}
+\ln \st{T^D_{n,t}} = \rho_T \ln  \st{T^D_{n,t-1}} + \varepsilon_{T,t}    
+\end{equation}
+\noindent $N-1$ equations
+\begin{equation}
+\ln \st{\phi_{n,t}} = \rho_{\phi_n} \ln  \st{\phi_{n,t-1}} + \varepsilon_{\phi_n,t}  
+\end{equation}
+\noindent $1$ equations
+\begin{equation}
+\st{\phi_{N,t}} = 1 - \sum_{i=1}^{N-1} \st{\phi_{i,t}}
+\end{equation}
+\noindent $N$ equations
+\begin{equation}
+\ln \st{\chi_{n,t}} = \rho_{\chi_n} \ln  \st{\chi_{n,t-1}} + \varepsilon_{\chi_n,t}    
+\end{equation}
+\noindent $N \times (N-1)$ equations
+\begin{equation}
+\ln \st{d_{ni,t}} = \left(1 - \rho_{d_{ni}} \right) \bar{d}_{ni} + \rho_{d_{ni}} \ln  \st{d_{ni,t-1}} + \varepsilon_{d_{ni},t}    
+\end{equation}
+\noindent $N$ equations
+\begin{equation}
+\ln \st{d_{nn,t}} = 0  
+\end{equation}
+\noindent $N$ equations
+\begin{equation}
+\ln \st{L_{n,t}} = \left(1 - \rho_{L_{n}} \right) \bar{L}_{n} + \rho_{L_{n}} \ln  \st{L_{n,t-1}} + \varepsilon_{L_{n},t}    
+\end{equation}
+
+
+\section{Steady State}
+
+Solving for steady state in two steps: First, solve for steady state values of $K_n$ and $Y_n$ via the non-linear system of equations below. The system can be solved by minimizing the sum of the two error terms defined at the end:
+
+\noindent $N$ equations. Wage
+\begin{equation}
+w_{n} = \beta^L \frac{Y_{n}}{L_{n}}
+\end{equation}
+
+\noindent $N$ equations. Rental rate
+\begin{equation}
+ r_{n} = \beta^K \frac{Y_{n}}{K_{n}}
+\end{equation}
+
+\noindent $N$ equations. Cost of a bundle of factors
+\begin{equation}
+b_{n}=\frac{Y_{n}}{B\left(L_{n}\right)^{\beta^{L}}\left(K_{n}\right)^{\beta^{K}}}
+\end{equation}
+where $B=\left(\beta^{L}\right)^{-\beta^{L}}\left(\beta^{K}\right)^{-\beta^{K}}$.
+
+\noindent $N$ equations. The price index of the durable (tradable) sector
+\begin{equation}
+p_{n}^{D}=\left(\sum_{i=1}^{\mathcal{N}}\left(\frac{b_{i} d_{n i}}{A_{i}^{D}}\right)^{-\theta}\right)^{-1 / \theta}
+\end{equation}
+
+\noindent $N$ equations. The fraction of durable goods that country $n$ obtains as imports from country $i$
+\begin{equation}
+\pi_{n i}=\left(\frac{b_{i} d_{n i}}{p_{n}^{D} A_{i}^{D}}\right)^{-\theta}
+\end{equation}
+
+\noindent $N$ equations. The absorption of the durable good in a country 
+\begin{equation}
+\mathbf{X^D_t} = \mathbf{\Pi_t}^{-1} \mathbf{Y^D_t}
+\end{equation}
+
+\noindent $N$ equations $\rightarrow$ $N$ error terms
+\begin{equation}
+\left| \frac{\frac{X_{n}^{D}}{p_{n}^{D} K_{n}}}{\left(\frac{\delta}{\chi_{n}}\right)^{1 / \alpha}} - 1 \right| = error \ terms \ \ (= 0 \ \text{in theory})
+\end{equation}
+
+\noindent $N$ equations $\rightarrow$ $N$ error terms
+\begin{equation}
+\left| \frac{X_{n}^{D}}{Y_{n}} - \beta^{K} \frac{\alpha \delta \rho}{1-\rho(1-\alpha \delta)} \right| = error \ terms \ \ (= 0 \ \text{in theory})
+\end{equation}
+
+\noindent Second, use the steady state values of $K_n$ and $Y_n$ to calculate $w_n$, $r_n$, $b_n$, $p^D_n$, $\pi_{ni}$, and $X^D_n$.
+
+\section{Parameters}
+\begin{equation*}
+	\gamma=\left[\Gamma\left(\frac{\theta-\sigma+1}{\theta}\right)\right]^{-1 /(\sigma-1) \mid}
+\end{equation*}
+where $\Gamma$ is the Gamma function.
+
+\noindent Also note that $\theta > \sigma - 1$ and $\sum^N_{n=1} \omega_n = 1$ must hold.
+
+
+
+
+\section{Parameters}
+{\small
+\begin{center}
+	\begin{tabular}{ccc} 
+		\hline
+		\hline
+		Symbol (Code) & Parameter & Value \\ 
+		\hline
+		$\theta$ () & & 2 \\ 
+		$\sigma$ () & & 2.5 \\
+		$\forall n$: $\omega_n$ () & & 0.5 \\
+		$\beta^L$ () & & 2/3 \\
+		$\beta^K$ () & & 1 - $\beta^L$ \\
+		$\delta$ () & & 0.1 \\
+ 		$\alpha$ () & & 0.55 \\ 
+		$\rho$ () & & 0.95 \\ 
+		$\forall n$: $\rho_{T_n}$ () & & 0.85 \\ 
+		$for \ n-1 \ countries$: $\rho_{\phi_n}$ () & & 0.85 \\ 
+		$\forall n$: $\rho_{\chi_n}$ () & & 0.85 \\ 
+		$\forall n \ \& \ i$: $\bar{d}_{ni}$ () & & 0.5 \\ 
+		$\forall n$: $d_{nn}$ () & & 1 \\ 
+		$\forall n$:  $\bar{L}_{n}$ () & & 0 \\
+		\hline
+	\end{tabular}
+\end{center}
+
+
+\end{document}
