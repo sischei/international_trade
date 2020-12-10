@@ -1,0 +1,5 @@
+MSE:            0.042980984  MAE:            0.20731856  MSE_no_penalty: 0.042980984  MAE_no_penatly: 0.20731856
+MSE:            0.03284618  MAE:            0.18123515  MSE_no_penalty: 0.03284618  MAE_no_penatly: 0.18123515
+MSE:            0.010239513  MAE:            0.10119048  MSE_no_penalty: 0.010239513  MAE_no_penatly: 0.10119048
+MSE:            0.008216959  MAE:            0.090647444  MSE_no_penalty: 0.008216959  MAE_no_penatly: 0.090647444
+MSE:            0.005979162  MAE:            0.077325046  MSE_no_penalty: 0.005979162  MAE_no_penatly: 0.077325046

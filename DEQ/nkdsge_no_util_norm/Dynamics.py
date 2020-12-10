@@ -8,7 +8,7 @@ from Parameters import s_A, s_G, s_Z, s_nu, s_psi, s_i
 import PolicyState
 
 global POST_PROCESSING
-POST_PROCESSING=False
+POST_PROCESSING=True
 
 # shocks
 shocks_Ax = [x * math.sqrt(2.0) * s_A for x in [-1.224744871, 0.0, +1.224744871]]
@@ -120,11 +120,11 @@ if POST_PROCESSING:
         policy_step = tf.zeros_like(prev_state)
         #policy_step = State.update(policy_step, "Kx",PolicyState.Ky(policy_state))
         policy_step = State.update(policy_step, "Kx",Definitions.Ky(prev_state, policy_state)) 
-        policy_step = State.update(policy_step, "Cx", (PolicyState.Cy(policy_state) + Parameters.b_habit * State.Cx(prev_state)))
-        policy_step = State.update(policy_step, "Ix", (PolicyState.Iy(policy_state)))
-        policy_step = State.update(policy_step, "Yx",PolicyState.Yy(policy_state))
-        policy_step = State.update(policy_step, "wx",PolicyState.wy(policy_state))
-        policy_step = State.update(policy_step, "nupx",PolicyState.nupy(policy_state))
-        policy_step = State.update(policy_step, "pix", PolicyState.piy(policy_state))
+        policy_step = State.update(policy_step, "Cx", (Definitions.Cy_norm(prev_state, policy_state) + Parameters.b_habit * State.Cx(prev_state)))
+        policy_step = State.update(policy_step, "Ix", (Definitions.Iy_norm(prev_state, policy_state)))
+        policy_step = State.update(policy_step, "Yx",Definitions.Yy_norm(prev_state, policy_state))
+        policy_step = State.update(policy_step, "wx",Definitions.wy_norm(prev_state, policy_state))
+        policy_step = State.update(policy_step, "nupx",Definitions.nupy_norm(prev_state, policy_state))
+        policy_step = State.update(policy_step, "pix", Definitions.piy_norm(prev_state, policy_state))
         return State.update(policy_step,"ix", Definitions.iy(prev_state, policy_state))
     

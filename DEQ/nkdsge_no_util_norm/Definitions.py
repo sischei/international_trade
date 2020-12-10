@@ -28,13 +28,13 @@ def Cy_norm(state, policy_state):
     return PolicyState.Cy(policy_state)*Cy_ss
 
 def piy_norm(state, policy_state):
-    return PolicyState.piy(policy_state)*piy_ss
+    return PolicyState.piy(policy_state)*(piy_ss + 1.0) - 1.0
 
 def pihashy_norm(state, policy_state):
-    return PolicyState.pihashy(policy_state)*pihashy_ss
+    return PolicyState.pihashy(policy_state)*(pihashy_ss + 1.0) - 1.0
 
 def Ry_norm(state, policy_state):
-    return PolicyState.Ry(policy_state)*Ry_ss
+    return PolicyState.Ry(policy_state)*(Ry_ss + 1.0) - 1.0
 
 def Iy_norm(state, policy_state):
     return PolicyState.Iy(policy_state)*Iy_ss

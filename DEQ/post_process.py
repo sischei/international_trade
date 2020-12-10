@@ -13,8 +13,10 @@ import sys
 Example file for postprocessing 
 """
 
+Hooks = importlib.import_module(Parameters.MODEL_NAME + ".Hooks")
+
 global POST_PROCESSING
-POST_PROCESSING=False
+POST_PROCESSING=True
 
 tf.get_logger().setLevel('CRITICAL')
 
@@ -23,49 +25,49 @@ starting_policy = Parameters.policy(Parameters.starting_state)
 
 Equations = importlib.import_module(Parameters.MODEL_NAME + ".Equations")
 
-for i, s in enumerate(Parameters.states):
-    for ps in Parameters.policy_states:
-        plt.plot(getattr(State,s)(Parameters.starting_state).numpy(), getattr(PolicyState,ps)(starting_policy).numpy(), 'bs')
-        # add policy lines at min / max / median
-        state_where_policy_is_min = tf.math.argmin(getattr(PolicyState,ps)(starting_policy))
-        state_where_policy_is_max = tf.math.argmax(getattr(PolicyState,ps)(starting_policy))
+#for i, s in enumerate(Parameters.states):
+    #for ps in Parameters.policy_states:
+        #plt.plot(getattr(State,s)(Parameters.starting_state).numpy(), getattr(PolicyState,ps)(starting_policy).numpy(), 'bs')
+        ## add policy lines at min / max / median
+        #state_where_policy_is_min = tf.math.argmin(getattr(PolicyState,ps)(starting_policy))
+        #state_where_policy_is_max = tf.math.argmax(getattr(PolicyState,ps)(starting_policy))
 
-        test_states = tf.sort(getattr(State,s)(Parameters.starting_state) * 4 - 3*tf.math.reduce_mean(getattr(State,s)(Parameters.starting_state)))
+        #test_states = tf.sort(getattr(State,s)(Parameters.starting_state) * 4 - 3*tf.math.reduce_mean(getattr(State,s)(Parameters.starting_state)))
 
-        states_lower = tf.tile(tf.expand_dims(Parameters.starting_state[state_where_policy_is_min,:],axis=0),[starting_policy.shape[0],1])
-        states_lower = tf.tensor_scatter_nd_update(states_lower,[[j,i] for j in range(Parameters.starting_state.shape[0])], test_states)
+        #states_lower = tf.tile(tf.expand_dims(Parameters.starting_state[state_where_policy_is_min,:],axis=0),[starting_policy.shape[0],1])
+        #states_lower = tf.tensor_scatter_nd_update(states_lower,[[j,i] for j in range(Parameters.starting_state.shape[0])], test_states)
 
-        plt.plot(test_states.numpy(), getattr(PolicyState,ps)(Parameters.policy(states_lower)).numpy(), 'r--')        
+        #plt.plot(test_states.numpy(), getattr(PolicyState,ps)(Parameters.policy(states_lower)).numpy(), 'r--')        
         
-        states_upper = tf.tile(tf.expand_dims(Parameters.starting_state[state_where_policy_is_max,:],axis=0),[starting_policy.shape[0],1])     
-        states_upper = tf.tensor_scatter_nd_update(states_upper,[[j,i] for j in range(Parameters.starting_state.shape[0])], test_states)
+        #states_upper = tf.tile(tf.expand_dims(Parameters.starting_state[state_where_policy_is_max,:],axis=0),[starting_policy.shape[0],1])     
+        #states_upper = tf.tensor_scatter_nd_update(states_upper,[[j,i] for j in range(Parameters.starting_state.shape[0])], test_states)
 
-        plt.plot(test_states.numpy(), getattr(PolicyState,ps)(Parameters.policy(states_upper)).numpy(), 'r--')        
+        #plt.plot(test_states.numpy(), getattr(PolicyState,ps)(Parameters.policy(states_upper)).numpy(), 'r--')        
 
-        plt.savefig(Parameters.LOG_DIR + '/' + s + '_' + ps + '.png')
-        plt.close()
+        #plt.savefig(Parameters.LOG_DIR + '/' + s + '_' + ps + '.png')
+        #plt.close()
         
-    for de in Parameters.definitions:
-        defined_value = getattr(Definitions,de)(Parameters.starting_state, starting_policy)
-        plt.plot(getattr(State,s)(Parameters.starting_state).numpy(), defined_value.numpy(), 'bs')
-        # add policy lines at min / max / median
-        state_where_def_is_min = tf.math.argmin(defined_value)
-        state_where_def_is_max = tf.math.argmax(defined_value)
+    #for de in Parameters.definitions:
+        #defined_value = getattr(Definitions,de)(Parameters.starting_state, starting_policy)
+        #plt.plot(getattr(State,s)(Parameters.starting_state).numpy(), defined_value.numpy(), 'bs')
+        ## add policy lines at min / max / median
+        #state_where_def_is_min = tf.math.argmin(defined_value)
+        #state_where_def_is_max = tf.math.argmax(defined_value)
 
-        test_states = tf.sort(getattr(State,s)(Parameters.starting_state) * 4 - 3*tf.math.reduce_mean(getattr(State,s)(Parameters.starting_state)))
+        #test_states = tf.sort(getattr(State,s)(Parameters.starting_state) * 4 - 3*tf.math.reduce_mean(getattr(State,s)(Parameters.starting_state)))
 
-        states_lower = tf.tile(tf.expand_dims(Parameters.starting_state[state_where_def_is_min,:],axis=0),[starting_policy.shape[0],1])
-        states_lower = tf.tensor_scatter_nd_update(states_lower,[[j,i] for j in range(Parameters.starting_state.shape[0])], test_states)
+        #states_lower = tf.tile(tf.expand_dims(Parameters.starting_state[state_where_def_is_min,:],axis=0),[starting_policy.shape[0],1])
+        #states_lower = tf.tensor_scatter_nd_update(states_lower,[[j,i] for j in range(Parameters.starting_state.shape[0])], test_states)
 
-        plt.plot(test_states.numpy(), getattr(Definitions,de)(states_lower, Parameters.policy(states_lower)).numpy(), 'r--')        
+        #plt.plot(test_states.numpy(), getattr(Definitions,de)(states_lower, Parameters.policy(states_lower)).numpy(), 'r--')        
         
-        states_upper = tf.tile(tf.expand_dims(Parameters.starting_state[state_where_def_is_max,:],axis=0),[starting_policy.shape[0],1])     
-        states_upper = tf.tensor_scatter_nd_update(states_upper,[[j,i] for j in range(Parameters.starting_state.shape[0])], test_states)
+        #states_upper = tf.tile(tf.expand_dims(Parameters.starting_state[state_where_def_is_max,:],axis=0),[starting_policy.shape[0],1])     
+        #states_upper = tf.tensor_scatter_nd_update(states_upper,[[j,i] for j in range(Parameters.starting_state.shape[0])], test_states)
 
-        plt.plot(test_states.numpy(), getattr(Definitions,de)(states_upper, Parameters.policy(states_upper)).numpy(), 'r--')        
+        #plt.plot(test_states.numpy(), getattr(Definitions,de)(states_upper, Parameters.policy(states_upper)).numpy(), 'r--')        
 
-        plt.savefig(Parameters.LOG_DIR + '/' + s + '_' + de + '.png')
-        plt.close()
+        #plt.savefig(Parameters.LOG_DIR + '/' + s + '_' + de + '.png')
+        #plt.close()
         
         
 if not Parameters.initialize_each_episode:
@@ -73,14 +75,19 @@ if not Parameters.initialize_each_episode:
     simulation_starting_state = tf.math.reduce_mean(Parameters.starting_state, axis = 0, keepdims=True)
     ## simulate a long range and calculate variable bounds + means from it for plotting
     print("Running a long simulation path")
-    N_simulated_episode_length = 10000
-    N_simulated_batch_size = 1
+    N_simulated_episode_length = Parameters.N_simulated_episode_length or 10000
+    N_simulated_batch_size = Parameters.N_simulated_batch_size or 1
 else:
     ## simulate from a multiple starting states drawn from the initial distribution
     print("Running a wide simulation path")
-    N_simulated_episode_length = 1
-    N_simulated_batch_size = 10000
+    N_simulated_episode_length = Parameters.N_simulated_episode_length or 1
+    N_simulated_batch_size = Parameters.N_simulated_batch_size or 10000
     simulation_starting_state = Parameters.initialize_states(N_simulated_batch_size)
+    if "post_init" in dir(Hooks):
+        print("Running post-init hook...")
+        Hooks.post_init()
+        print("Starting state after post-init:")
+        print(Parameters.starting_state)
         
 state_episode = tf.tile(tf.expand_dims(simulation_starting_state, axis = 0), [N_simulated_episode_length, 1, 1])
 

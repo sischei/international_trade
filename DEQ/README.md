@@ -1,8 +1,5 @@
-# Deep equilibrium Net 
-
-Implementation with Tensorflow 2.
-
-v0.9 - Simon Scheidegger, 06/2020
+# DEEP EQUILIBRIUM LIBRARY
+Simon Scheidegger, Dec. 2020
 
 
 # Dependencies
@@ -329,6 +326,14 @@ def policy_step(prev_state, policy_state):
         policy_step = State.update(policy_step, "Kx",State.Kx(prev_state))
         policy_step = State.update(policy_step, "Cx",State.Cx(prev_state))
         policy_step = State.update(policy_step, "Ix",State.Ix(prev_state))  
+
+### Post-processing configuration
+
+The default simulation length / width (which depends on `initialize_each_episode`) can be overridden by adding new flags when running post-process:
+
+```
+python post_process.py  ... +N_simulated_batch_size=100 +N_simulated_episode_length=100
+```
 
 ## Multi-node runs via Horovod
 

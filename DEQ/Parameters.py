@@ -206,6 +206,8 @@ def set_conf(cfg):
     setattr(sys.modules[__name__], "starting_state", starting_state)
     setattr(sys.modules[__name__], "initialize_states", initialize_states)
     setattr(sys.modules[__name__], "initialize_each_episode", cfg.get("initialize_each_episode",False)) 
+    setattr(sys.modules[__name__], "N_simulated_batch_size", cfg.get("N_simulated_batch_size",None))
+    setattr(sys.modules[__name__], "N_simulated_episode_length", cfg.get("N_simulated_episode_length",None)) 
     
     # LOGGING
     setattr(sys.modules[__name__], "LOG_DIR", os.getcwd())
