@@ -70,18 +70,33 @@ def set_conf(cfg):
     setattr(sys.modules[__name__], "N_episodes", cfg.N_episodes)
     setattr(sys.modules[__name__], "expectation_pseudo_draws", cfg.get('expectation_pseudo_draws',5))
     setattr(sys.modules[__name__], "expectation_type", cfg.get('expectation_type','product'))
-
-    # VARIABLES
-    setattr(sys.modules[__name__], "states", [s['name'] for s in cfg.states])
-    setattr(sys.modules[__name__], "policy_states", [s['name'] for s in cfg.policies])
-    setattr(sys.modules[__name__], "definitions", [s['name'] for s in cfg.definitions])
     
     # OUTPUT FILE FOR ERROR MEASURES
     setattr(sys.modules[__name__], "error_filename", cfg.error_filename)
+   
+
+    # VARIABLES
+    try:
+        import importlib
+        variables = importlib.import_module(MODEL_NAME + ".Variables")
+        config_states = variables.states
+        config_policies = variables.policies
+        config_definitions = variables.definitions
+        print("Variables imported from Variables module")
+        print(__name__)
+    except ImportError:
+        config_states = cfg.states
+        config_policies = cfg.policies
+        config_definitions = cfg.definitions
+        
+    setattr(sys.modules[__name__], "states", [s['name'] for s in config_states])
+    setattr(sys.modules[__name__], "policy_states", [s['name'] for s in config_policies])
+    setattr(sys.modules[__name__], "definitions", [s['name'] for s in config_definitions])
+    
     
     state_bounds = {"lower": {}, "penalty_lower": {}, "upper": {}, "penalty_upper": {}}
 
-    for s in cfg.states:
+    for s in config_states:
         if "bounds" in s.keys() and "lower" in s["bounds"].keys():
             state_bounds["lower"][s["name"]] = s["bounds"]["lower"]
             if 'penalty_lower' in s['bounds'].keys():
@@ -102,7 +117,7 @@ def set_conf(cfg):
     
     policy_bounds = {'lower': {}, 'penalty_lower': {}, 'upper': {}, 'penalty_upper': {}}
 
-    for s in cfg.policies:
+    for s in config_policies:
         if 'bounds' in s.keys() and 'lower' in s['bounds'].keys():
             policy_bounds['lower'][s['name']] = s['bounds']['lower']
             if 'penalty_lower' in s['bounds'].keys():
@@ -124,7 +139,7 @@ def set_conf(cfg):
 
     definition_bounds = {'lower': {}, 'penalty_lower': {}, 'upper': {}, 'penalty_upper': {}}
 
-    for s in cfg.definitions:
+    for s in config_definitions:
         if 'bounds' in s.keys() and 'lower' in s['bounds'].keys():
             definition_bounds['lower'][s['name']] = s['bounds']['lower']
             if 'penalty_lower' in s['bounds'].keys():
@@ -142,6 +157,7 @@ def set_conf(cfg):
             definition_bounds['penalty_upper'][s['name']] = penalty
             
     setattr(sys.modules[__name__], "definition_bounds_hard", definition_bounds)
+    
     
     # NEURAL NET
     tf.keras.backend.set_floatx(cfg.get('keras_precision','float32'))
@@ -168,7 +184,7 @@ def set_conf(cfg):
     # apply post-processing per-variable
     def policy(s):
         raw_policy = policy_net(s)
-        for i, pol in enumerate(cfg.policies):
+        for i, pol in enumerate(config_policies):
             if 'activation' in pol.keys():
                 activation_str = pol['activation']
                 if pol['activation'] == 'implied':
@@ -196,7 +212,7 @@ def set_conf(cfg):
         # starting state
         init_val = tf.ones([N_batch, len(states)])
         # apply special inits if any
-        for i,s in enumerate(cfg.states):
+        for i,s in enumerate(config_states):
             if 'init' in s:
                 init_val = tf.tensor_scatter_nd_update(init_val, [[j,i] for j in range(init_val.shape[0])], getattr(rng,s["init"]["distribution"])(shape=(N_batch,), **s["init"]["kwargs"]))
         return init_val
