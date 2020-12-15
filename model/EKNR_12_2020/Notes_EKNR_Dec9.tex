@@ -52,14 +52,14 @@
 \begin{enumerate}
 	\item The set of endogenous state variables has the following elements: \\
 	 $K_t$\\
-	 CODE: Kx 
+	 CODE: Kx ($>0$).
 	\item The set of exogenous state variables has the following elements (n: country index): \\
 	 $T^D_{n,t}$, $\phi_{n,t}$, $L_{n,t}$ (ignored for now, fixed to $1$),  $\chi_{n,t}$, $d_{ni,t}$ \\
-	 CODE: $TD\_n\_x$, $\phi\_n\_x$, $L\_n\_x$ (ignored for now, fixed to $1$) , $chi\_n\_x$, $d\_n\_i\_x$ (this last state is going to be a complicated state) \\
+	 CODE: $TD\_n\_x$, $\phi\_n\_x$, $L\_n\_x$ (ignored for now, fixed to $1$) , $chi\_n\_x$, $d\_n\_i\_x$ (this last state is going to be a complicated state). \\
 	 \item The set of control variables has the following elements (n: country index): \\
 	 $A_{n, t}^{D}$, $Y^S_{n,t}$,$Y^D_{n,t}$,$Y_{n,t}$, $w_{n,t}$, $r_{n,t}$, $b_{n,t}$, $p^D_{n,t}$, $\pi^D_{ni,t}$, $K_{n,t+1}$, $X^D_{n,t}$...\\
-	 CODE: $AD\_n\_y$, $YS\_n\_y$, $YD\_n\_y$, $Y\_n\_y$, 
-	 $w\_n_\_y$, $r\_n\_y$, $b\_n\_y$, $pD\_n\_y$, $piD\_n\_i\_y$ (this policy is going to be a complicated one), $K\_n\_y$, $XD\_n_\_y$     \\
+	 CODE: $AD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $Y\_n\_y$ ($>0$), 
+	 $w\_n_\_y$ ($>0$), $r\_n\_y$ ($>0$), $b\_n\_y$ ($>0$), $pD\_n\_y$ ($>0$), $piD\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $K\_n\_y$ (>0), $XD\_n_\_y$ (>0). \\
 \end{enumerate}
 
 
@@ -143,7 +143,7 @@ These fractions imported form an $N \times N$ matrix $\mathbf{\cl{\Pi_t}}$.
 
 \noindent $N$ equations
 \begin{equation}
-\ln \st{T^D_{n,t}} = \rho_T \ln  \st{T^D_{n,t-1}} + \varepsilon_{T,t}    
+\ln \st{T^D_{n,t}} = \rho_T \ln  \st{T^D_{n,t-1}} + \varepsilon_{Tn,t}    
 \end{equation}
 \noindent $N-1$ equations
 \begin{equation}
@@ -151,7 +151,7 @@ These fractions imported form an $N \times N$ matrix $\mathbf{\cl{\Pi_t}}$.
 \end{equation}
 \noindent $1$ equations
 \begin{equation}
-\st{\phi_{N,t}} = 1 - \sum_{i=1}^{N-1} \st{\phi_{i,t}}
+\st{\phi_{N,t}} = N_{country} - \sum_{i=1}^{N-1} \st{\phi_{i,t}}
 \end{equation}
 \noindent $N$ equations
 \begin{equation}
@@ -240,7 +240,11 @@ where $\Gamma$ is the Gamma function.
 		$N_{countries}$ (N\_{countries}) & & 2 \\ 		
 		$\theta$ (theta) & & 2 \\ 
 		$\sigma$ (sigma) & & 2.5 \\
-		$\forall n$: $\omega_n$ (omega\_n) & & 0.5 \\
+		$\sigma_{Tn,t}$ (sigma\_Tn) & & 0.01 \\
+		$\sigma_{\phi n,t}$ (sigma\_phi\_n) & & 0.02 \\				$\sigma_{\chi n,t}$ (sigma\_chi\_n) & & 0.01 \\
+                $\sigma_{d_{ni,t}}$ (sigma\_d\_n\_i) & & 0.01 \\
+                $\sigma_{L_{n,t}}$ (sigma\_L\_n) & & 0.01 \\		                
+		$\forall n$: $\omega_n$ (omega\_n) & & 1/N\_{countries}\\
 		$\beta^L$ (betaL) & & 2/3 \\
 		$\beta^K$ (betaK) & & 1 - $\beta^L$ \\
 		$\delta$ (delta) & & 0.1 \\
