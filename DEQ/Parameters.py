@@ -82,12 +82,14 @@ def set_conf(cfg):
         config_states = variables.states
         config_policies = variables.policies
         config_definitions = variables.definitions
+        config_constants = {**variables.constants, **cfg.constants}
         print("Variables imported from Variables module")
         print(__name__)
     except ImportError:
         config_states = cfg.states
         config_policies = cfg.policies
         config_definitions = cfg.definitions
+        config_constants = cfg.constants
         
     setattr(sys.modules[__name__], "states", [s['name'] for s in config_states])
     setattr(sys.modules[__name__], "policy_states", [s['name'] for s in config_policies])
@@ -204,7 +206,7 @@ def set_conf(cfg):
     setattr(sys.modules[__name__], "optimizer", optim)
        
     # CONSTANTS
-    for (key, value) in cfg.constants.items():
+    for (key, value) in config_constants.items():
         setattr(sys.modules[__name__], key, value)
 
     # STATE INITIALIZATION

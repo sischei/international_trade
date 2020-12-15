@@ -34,3 +34,5 @@ definitions = [{'name': 'c1', 'bounds': {'lower': 1e-4}},
   {'name': 'r'},
   {'name': 'w'},
   {'name': 'Y'}]
+
+constants = {'alpha': 0.3, 'eq_scale': 1e-2}
