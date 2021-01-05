@@ -82,7 +82,10 @@ def set_conf(cfg):
         config_states = variables.states
         config_policies = variables.policies
         config_definitions = variables.definitions
-        config_constants = {**variables.constants, **cfg.constants}
+        config_constants = variables.constants
+        # for backward compatibility in case constants are also in yaml
+        if cfg.constants:
+           config_constants.update(cfg.constants)
         print("Variables imported from Variables module")
         print(__name__)
     except ImportError:
