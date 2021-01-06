@@ -80,7 +80,7 @@ The $\cl{A^D_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{A^D_t}
 \end{equation}
 The $\cl{Y^S_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{Y^S_t}}$.
 
-\noindent $N$ equations. Rental rate
+\noindent $N$ equations. Rental rate (in code, we multiply with K to avoid a singularity)
 \begin{equation}
 0 =\cl{Y_{n,t}} - \cl{Y^D_{n,t}} - \cl{Y^S_{n,t}}
 \end{equation}
@@ -121,7 +121,7 @@ These fractions imported form an $N \times N$ matrix $\mathbf{\cl{\Pi_t}}$.
 0 = \mathbf{\cl{\Pi_t}}^{-1} \mathbf{\cl{Y^D_t}} - \mathbf{\cl{X^D_t}}
 \end{equation}
 
-\noindent $N$ equations. The law of motion of capital
+\noindent $N$ equations. The law of motion of capital (multiply with p in code to avoid a singularity)
 \begin{equation}
 0 = \cl{K_{n,t+1}} - \st{\chi_{n,t}} \left( \frac{\cl{X_{n,t}^D}}{\cl{p_{n,t}^D}} \right) \st{K_{n,t}}^{1-\alpha} + \left(1 - \delta\right) \st{K_{n,t}}
 \end{equation}
@@ -161,7 +161,7 @@ These fractions imported form an $N \times N$ matrix $\mathbf{\cl{\Pi_t}}$.
 \begin{equation}
 \ln \st{d_{ni,t}} = \left(1 - \rho_{d_{ni}} \right) \bar{d}_{ni} + \rho_{d_{ni}} \ln  \st{d_{ni,t-1}} + \varepsilon_{d_{ni},t}    
 \end{equation}
-\noindent $N$ equations
+\noindent $N$ equations (add those states to the definitions!)
 \begin{equation}
 \ln \st{d_{nn,t}} = 0  
 \end{equation}
