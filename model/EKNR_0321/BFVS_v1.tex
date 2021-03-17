@@ -1,0 +1,763 @@
+\RequirePackage{ifpdf} \ifpdf
+\documentclass[12pt, bibtotoc, tablecaptionabove, figurecaptionabove, fleqn]{article}
+\else
+\documentclass[12pt, bibtotoc, tablecaptionabove, figurecaptionabove, fleqn]{article}
+\fi
+\usepackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]{geometry}  
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{natbib}
+\usepackage{appendix}
+\usepackage{amsfonts}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{theorem}
+\usepackage{setspace}
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage{makecell}
+\usepackage{newpxtext,newpxmath}
+\usepackage{caption}
+\usepackage{xcolor}
+\renewcommand{\baselinestretch}{1.5}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\setlength{\textwidth}{7.2in}
+\setlength{\evensidemargin}{0in}
+\setlength{\oddsidemargin}{-0.3in}
+\setlength{\textheight}{9.2in}
+\setlength{\topmargin}{-.45in}
+
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\LB}{\text{LB}}
+\newcommand{\UB}{\text{UB}}
+\newcommand{\Lagr}{\mathop{\mathcal{L}}}
+\newcommand{\cl}[1]{{\color{orange}{#1}}}
+\newcommand{\st}[1]{{\color{green}{#1}}}
+\newcommand{\stnext}[1]{{\color{magenta}{#1}}}
+\newcommand{\clnext}[1]{{\color{blue}{#1}}}
+\newcommand{\Ex}[2]{\mathbb{E}_{#1}\left[#2\right]}
+
+
+
+\begin{document}
+
+\thispagestyle{empty}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\baselinestretch}{1}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+% Declares the document's title.
+\vspace{-1cm}
+\title{\Huge{Ricardian Business Cycle\thanks{\noindent We thank... This work was supported by the Swiss National Science Foundation (SNF), under project ID  \lq\lq Can Economic Policy Mitigate Climate-Change?\rq\rq, and the Swiss Platform for Advanced Scientific Computing (PASC), under project ID \lq\lq Computing Equilibria in Heterogeneous Agent Macro Models on Contemporary HPC Platforms\rq\rq, for research support, and the Swiss National Supercomputing Center (CSCS) under project ID 995. Simon Scheidegger gratefully acknowledges support from the MIT Sloan School of Management and the Cowles Foundation at Yale University.}\\
+%\thanks{\noindent
+%}\\
+}}
+
+\author{
+{Lorenzo Bretscher}\\
+{HEC Lausanne \& SFI \& CEPR\footnote{Department of Finance, Email: lorenzo.bretscher@unil.ch}} \and {Jes\'{u}s Fern\'{a}ndez-Villaverde}\\ {University of Pennsylvania, NBER \& CEPR \footnote{Department of Economics, Email: jesusfv@econ.upenn.edu}}\and {Simon Scheidegger} \\{HEC Lausanne \footnote{Department of Economics, Email: simon.scheidegger@unil.ch}}}
+
+
+\maketitle                   % Produces the title.
+\vspace{-1cm}
+
+
+\setlength{\baselineskip}{.3in} \thispagestyle{empty} %%
+
+
+\begin{abstract}
+This note presents a global solution method for a simple trade model in the spirit of Eaton, Kortum, Neiman, and Romalis (2016). Our approach rests on neural network and can be applied to the model written in levels which contrasts the dynamic setting approach used by Dekle, Eation, and Kortum (2007) and extended by Costinot and Rodriguez-Clare (2014).
+\end{abstract}
+
+
+
+\vspace{0.5cm}
+
+\thispagestyle{empty}
+
+
+\renewcommand{\baselinestretch}{1.5}
+
+\newpage
+\setcounter{page}{1}
+\newpage
+\setcounter{footnote}{0}
+\renewcommand{\thefootnote}{\arabic{footnote} }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Next steps}
+\begin{itemize}
+    \item adjust document as follows
+    \item study business cycle properties
+    \item generalized impulse-responses with various different shocks? (1std dev, or 2? Shock 1 variable in 1 country, go on 25 periods, shocks in tradable sectors,...)
+\end{itemize}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\section{A Model of International Trade}
+In what follows, we outline a model of international trade. In fact, we rely on the work of \cite{EKN2016} and use their theoretic framework to illustrate our solution methodology. The model features an arbitrary number of countries, $n=1, \ldots, \mathcal{N}$ with three sectors: durable manufacturers (D), nondurable maanufacturers (N), and services (S). Let $\Omega = \{D,N,S\}$ denote the set of all sectors. 
+
+In addition to its labor endowment $L_{n, t},$ at any date $t$ country $n$ has an endowment $K_{n, t}^{D}$ (which defines the set $\Omega_{K} = \{D\}$) of capital of type D. At any date households and firms consume the service of this stock of capital. The output of sector D can serve as investment to build this stock of capital. In addition, each sector $j \in \Omega$ uses the output of each sector as intermediate inputs. Outputs of nondurables and services $\left(\Omega_{K}^{*},\right.$ the complement of $\left.\Omega_{K}\right)$ are also used directly for consumption.
+
+In each sector, total output is a CES aggregate (with elasticity of substitution $\sigma$ ) of the outputs of a unit continuum of goods (a separate one for each sector) indexed by $z \in[0,1]$. Country $n$'s efficiency $a_{n, t}^{j}(z)$ at making good $z$ in sector $j$ is the realization of a random variable $a_{n, t}^{j}$ with
+distribution:
+\begin{equation*}
+	F_{n, t}^{j}(a)=\operatorname{Pr}\left[a_{n, t}^{j} \leq a\right]=\exp \left[-\left(\frac{a}{\gamma A_{n, t}^{j}}\right)^{-\theta}\right]
+\end{equation*}
+
+drawn independently for each $z$ across countries $n .$ Here, $A_{n, t}^{j}>0$ is a parameter that reflects country $n$'s overall productivity in sector $j$. The parameter $\theta$ is an inverse measure of the dispersion of efficiencies and $\gamma$ is related to the gamma function:
+\begin{equation*}
+	\gamma=\left[\Gamma\left(\frac{\theta-\sigma+1}{\theta}\right)\right]^{-1 /(\sigma-1)}
+\end{equation*}
+
+
+Production of good $z$ in each sector combines the services of labor, the services of each type of capital, and intermediates from each of the four sectors. Technology is Cobb-Douglas with constant returns to scale. The output elasticities in country $n$ and sector $j$ of labor, capital of type $D$ and intermediates from sector $j^{\prime}$ are given by $\beta_{n}^{L, j}, \beta_{n}^{K, j D},$ and $\beta_{n}^{M, j j^{\prime}}$ for $j, j^{\prime} \in \Omega$. As has been standard in trade models since Ricardo, the endowments of labor and capital are not traded. Trade in the outputs of the four sectors incurs standard iceberg trade costs, so that delivering one unit of a good from country $i$ to country $n$ requires shipping $d_{n i, t}^{j} \geq 1$ units, with $d_{n n, t}^{j}=1 .$ We treat sectors $l \in \Omega_{T}=\{D, N\}$ as tradable so that $d_{n i, t}^{l}$ are finite. We treat services as nontraded, so that $d_{n i, t}^{S}$
+as infinite for $i \neq n$.
+
+\section{Preferences}
+At each date $t$ the representative household in country $n$ consumes output of the nondurables and services sectors in amounts $C_{n, t}^{N}$ and $C_{n, t^{*}}^{S}$. It also consumes the services of the stocks of durables in amounts $K_{n, t}^{H, D}$. The utility function aggregates these flows of consumption with Cobb-Douglas weights $\psi_{n, t}^{j} \geq 0,$ where $\psi^{D}_n+\psi_{n, t}^{N}+\psi_{n, t}^{S}=1 .$ Note that
+we treat the weights on household capital services as fixed across countries and over time, but allow for country-specific shifts between nondurables and services over time. The lifetime utility of the representative agent in country $n$ is:
+$$
+U_{n}=\sum_{t=0}^{\infty} \rho^{t} \phi_{n, t}\left(\sum_{j \in \Omega_{K}^{*}} \psi_{n, t}^{j} \ln C_{n, t}^{j}+ \psi^{D}_n \ln K_{n, t}^{H, D}\right)
+$$
+where $\rho$ is a constant discount factor and $\phi_{n, t}$ is a shock to intertemporal preferences for country
+$n$ at date $t,$ which we call an aggregate demand shock.
+
+\subsection{Social Planner's Problem}
+Markets are perfectly competitive and complete. Since there are no market failures, we can reformulate the problem, following Lucas and Prescott $(1971),$ and solve for the market allocation as the solution to a world planner's problem.
+
+The world planner assigns a weight $\omega_{n}$ to the representative consumer in country $n$. We restrict aggregate demand shocks to have no global component, setting $\sum_{n=1}^{\mathcal{N}} \omega_{n} \phi_{n, t}=1$. The planner's objective at date 0 is to maximize:
+\begin{equation*}
+	W=\sum_{n=1}^{\mathcal{N}} \omega_{n} U_{n}
+\end{equation*}
+where she takes as given the initial stocks of each type of capital in each country $n, K_{n,0}^{D}$.
+
+\begin{equation*}
+\begin{aligned}
+\mathcal{L}=& \sum_{n=1}^{\mathcal{N}} \sum_{t=0}^{\infty} \rho^{t}\left[\omega_{n} \phi_{n, t}\left(\sum_{j \in \Omega_{K}^{*}} \psi_{n, t}^{j} \ln C_{n, t}^{j}+ \psi^{D}_n \ln K_{n, t}^{H, D}\right)\right.\\
+&+\lambda_{n, t}^{L}\left(L_{n, t}-\sum_{j \in \Omega} \int_{0}^{1} L_{n, t}^{j}(z) d z\right)+ \lambda_{n, t}^{K}\left(K_{n, t}^{D}-\sum_{j \in \Omega} \int_{0}^{1} K_{n, t}^{j D}(z) d z-K_{n, t}^{H, D}\right) \\
+&+\sum_{j \in \Omega} \int_{0}^{1} \lambda_{n, t}^{j}(z)\left(a_{n, t}^{j}(z)\left(\frac{L_{n, t}^{j}(z)}{\beta_{n}^{L, j}}\right)^{\beta_{n}^{L, j}} \left(\frac{K_{n, t}^{j D}(z)}{\beta_{n}^{K, j D}}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(\frac{M_{n, t}^{j j^{\prime}}(z)}{\beta_{n}^{M, j j^{\prime}}}\right)^{\beta_{n}^{M, j j^{\prime}}}-y_{n, t}^{j}(z)\right) d z \\
+&+\sum_{j \in \Omega} \int_{0}^{1} \hat{\lambda}_{n, t}^{j}(z)\left(y_{n, t}^{j}(z)-\sum_{m=1}^{\mathcal{N}} d_{m n, t}^{j} x_{m n, t}^{j}(z)\right) d z \\
+&+\sum_{j \in \Omega} \int_{0}^{1} \tilde{\lambda}_{n, t}^{j}(z)\left(\sum_{i=1}^{\mathcal{N}} x_{n i, t}^{j}(z)-x_{n, t}^{j}(z)\right) d z \\
+&+\sum_{j \in \Omega} \lambda_{n, t}^{j}\left(\left(\int_{0}^{1} x_{n, t}^{j}(z)^{(\sigma-1) / \sigma} d z\right)^{\sigma /(\sigma-1)}-x_{n, t}^{j}\right) \\
+%&+\tilde{\lambda}_{n, t}^{S}\left[\left(\int_{0}^{1} y_{n, t}^{S}(z)^{(\sigma-1) / \sigma} d z\right)^{\sigma /(\sigma-1)} - \sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j S}(z) d z-C_{n, t}^{S}\right] \\
+&+\tilde{\lambda}_{n, t}^{N}\left(x_{n, t}^{N}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j N}(z) d z-C_{n, t}^{N}\right)+\tilde{\lambda}_{n, t}^{D}\left(x_{n, t}^{D}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j D}(z) d z-I_{n, t}^{D}\right) \\
+&+\sum_{h \in \Omega_K^{\star}}\tilde{\lambda}_{n, t}^{h}\left(x_{n, t}^{h}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j h}(z) d z-C_{n, t}^{h}\right)+\tilde{\lambda}_{n, t}^{D}\left(x_{n, t}^{D}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j D}(z) d z-I_{n, t}^{D}\right) \\
+&+\lambda_{n, t}^{V^D}\left(\chi_{n, t}^{D}\left(I_{n, t}^{D}\right)^{\alpha^D}\left(K_{n, t}^{D}\right)^{1-\alpha^{D}}+\left(1-\delta^{D}\right) K_{n, t}^{D}-K_{n, t+1}^{D}\right) \\
+&\left.+\sum_{j \in \Omega} \int_{0}^{1} \bar{\lambda}_{n, t}^{j}(z) y_{n, t}^{j}(z) d z+\sum_{j \in \Omega} \sum_{i=1}^{\mathcal{N}} \int_{0}^{1} \bar{\lambda}_{n i, t}^{j}(z) x_{n i, t}^{j}(z) d z\right]
+\end{aligned}
+\end{equation*}
+
+where each $\lambda$ is the Lagrange multiplier associated with the corresponding constraint. The constaints include the sets discussed below together with non-negativity constraints on the $y_{n, t}^{j}(z)$'s and the $x_{n i, t}^{j}(z)$'s. The transversality conditions are:
+$$
+\lim _{t \rightarrow \infty} \rho^{t} \lambda_{n, t}^{V^{D}} K_{n, t+1}^{D}=0
+$$
+for each $n=1, \ldots, \mathcal{N}$.
+
+
+NOTE: NEED TO MAKE SURE THAT ALL $X^S$ ARE ZERO, i.e., $y_n^S = x_{nn}^S = x_{n}^S$
+
+\subsubsection{Specialization of Production Goods}
+We start by deriving which countries produce each good, and to which other countries they ship it. The first-order condition with respect to shipments $x_{n i, t}^{j}(z)$ of good $z$ in sector $j$ from country
+$i$ to $n$ gives:
+\begin{equation*}
+	\tilde{\lambda}_{n, t}^{j}(z)+\bar{\lambda}_{n i, t}^{j}(z)=\hat{\lambda}_{i, t}^{j}(z) d_{n i, t}^{j}
+\end{equation*}
+We need to consider two possibilities. If $\bar{\lambda}_{n i, t}^{j}(z)>0$ then $\tilde{\lambda}_{n, t}^{j}(z)<\hat{\lambda}_{i, t}^{j}(z) d_{n i, t}^{j}$ and $x_{n i, t}^{j}(z)=0$
+while if $x_{n i, t}^{j}(z)>0$ then $\bar{\lambda}_{n i, t}^{j}(z)=0$ and $\tilde{\lambda}_{n, t}^{j}(z)=\hat{\lambda}_{i, t}^{j}(z) d_{n i, t}^{j} .$ Since country $n$ will obtain this
+good from somewhere, looking across all source countries $i:$
+\begin{equation*}
+	\tilde{\lambda}_{n, t}^{j}(z)=\min _{i}\left\{\hat{\lambda}_{i, t}^{j}(z) d_{n i, t}^{j}\right\}
+\end{equation*}
+The first-order condition with respect to production $y_{n, t}^{j}(z)$ of good $z$ in sector $j$ by country
+$n$ is:
+\begin{equation*}
+	\hat{\lambda}_{n, t}^{j}(z)+\bar{\lambda}_{n, t}^{j}(z)=\lambda_{n, t}^{j}(z)
+\end{equation*}
+
+Thus $\lambda_{i, t}^{j}(z) \geq \hat{\lambda}_{i, t}^{j}(z)$ for all countries $i,$ with equality if $y_{i, t}^{j}(z)>0 .$ Since $x_{n i, t}^{j}(z)>0$ implies $y_{i, t}^{j}(z)>0$ we can rewrite the equation above as
+\begin{equation}\label{eq:eq1}
+	\tilde{\lambda}_{n, t}^{j}(z)=\min _{i}\left\{\lambda_{i, t}^{j}(z) d_{n i, t}^{j}\right\}
+\end{equation}
+
+Country $i$ produces good $z$ in sector $j$ if and only if it achieves this minimum in some destination $n$.
+
+\subsection{The Cost of Production}
+
+Suppose country $n$ does produce good $z$ in sector $j$ so that $y_{n, t}^{j} (z)>0$. The first-order conditions for inputs of labor, capital, and intermediates to produce it give us, for each $j \in \Omega$ :
+\begin{equation*}
+	\begin{array}{c}
+\lambda_{n, t}^{j}(z) \beta_{n}^{L, j} \frac{y_{n, t}^{j}(z)}{L_{n, t}^{j}(z)}-\lambda_{n, t}^{L} \\
+\lambda_{n, t}^{j}(z) \beta_{n}^{K, j D} \frac{y_{n, t}^{j}(z)}{K_{n, t}^{j k}(z)}=\lambda_{n, t}^{K^{D}}
+\end{array}
+\end{equation*}
+
+and
+\begin{equation*}
+	\lambda_{n, t}^{j}(z) \beta_{n}^{M, j j^{\prime}} \frac{y_{n, t}^{j}(z)}{M_{n, t}^{j j^{\prime}}(z)}=\lambda_{n, t}^{j^{\prime}}
+\end{equation*}
+for $j^{\prime} \in \Omega$.
+
+We can relate the shadow cost of producing a good to the shadow costs of the inputs used to
+produce it. Multiplying the production function by the associated shadow value of output, we
+get:
+\begin{equation*}
+	Y_{n, t}^{j}(z)=\lambda_{n, t}^{j}(z) y_{n, t}^{j}(z)=\lambda_{n, t}^{j}(z) a_{n, t}^{j}(z)\left(\frac{L_{n, t}^{j}(z)}{\beta_{n}^{L, j}}\right)^{\beta_{n}^{L, j}} \left(\frac{K_{n, t}^{j D}(z)}{\beta_{n}^{K, j D}}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(\frac{M_{n, t}^{j j^{\prime}}(z)}{\beta_{n}^{M, j j^{\prime}}}\right)^{\beta_{n}^{M, j j^{\prime}}}
+\end{equation*}
+
+
+Inserting the first-order conditions given above for inputs implies:
+\begin{equation*}
+Y_{n, t}^{j}(z)=\lambda_{n, t}^{j}(z) a_{n, t}^{j}(z)\left(\frac{Y_{n, t}^{j}(z)}{\lambda_{n, t}^{L}}\right)^{\beta_{n}^{L, j}} \left(\frac{Y_{n, t}^{j}(z)}{\lambda_{n, t}^{K^D}}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(\frac{Y_{n, t}^{j}(z)}{\lambda_{n, t}^{j^{\prime}}}\right)^{\beta_{n}^{M, j j^{\prime}}}
+\end{equation*}
+Constant returns to scale implies that $Y_{n, t}^{j}(z)$ cancels, giving us the shadow value of good $z$ in
+sector $j$ in country $n$ :
+\begin{equation}\label{eq:eq2}
+\lambda_{n, t}^{j}(z)=\frac{c_{n, t}^{j}}{a_{n, t}^{j}(z)}
+\end{equation}
+where the term:
+\begin{equation*}
+c_{n, t}^{j}=\left(\lambda_{n, t}^{L}\right)^{\beta_{n}^{L, j}} \left(\lambda_{n, t}^{K^{D}}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(\lambda_{n, t}^{j^{\prime}}\right)^{\beta_{n}^{M, j j^{\prime}}}
+\end{equation*}
+bundles the shadow costs of labor, capital, and intermediates in producing any good in sector $j$
+in country $n$. Applying \ref{eq:eq2} allows us to write \ref{eq:eq1} as:
+\begin{equation*}
+\tilde{\lambda}_{n, t}^{j}(z)=\min _{i}\left\{\frac{c_{i, t}^{j}}{a_{i, t}^{j}(z)} d_{n i, t}^{j}\right\}
+\end{equation*}
+
+
+
+\subsection{Demand for Goods}
+
+Now we take the first-order condition with respect to $x_{n, t}^{j}(z)$ to get:
+\begin{equation*}
+	\tilde{\lambda}_{n, t}^{j}(z)=\lambda_{n, t}^{j}\left(x_{n, t}^{j}\right)^{1 / \sigma} x_{n, t}^{j}(z)^{-1 / \sigma}
+\end{equation*}
+
+which we can rearrange as:
+\begin{equation*}
+	x_{n, t}^{j}(z)=\left(\frac{\tilde{\lambda}_{n, t}^{j}(z)}{\lambda_{n, t}^{j}}\right)^{-\sigma} x_{n, t}^{j}
+\end{equation*}
+
+Letting $X_{n, t}^{j}(z)=\tilde{\lambda}_{n, t}^{j}(z) x_{n, t}^{j}(z)$ and $X_{n, t}^{j}=\lambda_{n, t}^{j} x_{n, t}^{j},$ we obtain:
+\begin{equation}\label{eq:eq3}
+	X_{n, t}^{j}(z)=\left(\frac{\tilde{\lambda}_{n, t}^{j}(z)}{\lambda_{n, t}^{j}}\right)^{-(\sigma-1)} X_{n, t}^{j}
+\end{equation}
+
+We can aggregate over the absorption of individual goods using:
+\begin{equation*}
+x_{n, t}^{j}=\left(\int_{0}^{1} x_{n, t}^{j}(z)^{(\sigma-1) / \sigma} d z\right)^{\sigma /(\sigma-1)}
+\end{equation*}
+
+In combination with \ref{eq:eq3} we get: 
+\begin{equation}\label{eq:eq4}
+X_{n, t}^{j}=\int_{0}^{1} X_{n, t}^{j}(z) d z
+\end{equation}
+
+Integrating both sides of \ref{eq:eq3} and applying \ref{eq:eq4} we also get:
+\begin{equation*}
+\lambda_{n, t}^{j}=\left(\int_{0}^{1} \tilde{\lambda}_{n, t}^{j}(z)^{-(\sigma-1)} d z\right)^{-1 /(\sigma-1)}
+\end{equation*}
+
+To obtain sharper results for aggregates we will need to exploit our assumption on the distribution of good-level production efficiency.
+
+
+\subsection{International Trade}
+We now view the problem from the perspective of not knowing the individual realizations of efficiency $a_{n, t}^{j}(z)$ but only the parameters of the distribution (1) from which they are drawn (which we repeat here for convenience):
+\begin{equation*}
+F_{n, t}^{j}(a)=\operatorname{Pr}\left[a_{n, t}^{j}(z) \leq a\right]=\exp \left[-\left(\frac{a}{\gamma A_{n, t}^{j}}\right)^{-\theta}\right]
+\end{equation*}
+
+We can derive the probability distribution function $G_{n, t}^{j}(x)$ of the $\tilde{\lambda}_{n, t}^{j}(z)$ s as:
+\begin{equation*}
+	\begin{aligned}
+G_{n, t}^{j}(x) &=\operatorname{Pr}\left[\tilde{\lambda}_{n, t}^{j}(z) \leq x\right]=1-\operatorname{Pr}\left[\min _{i}\left\{\frac{c_{i, t}^{j} d_{n i, t}^{j}}{a_{i, t}^{j}(z)}\right\}>x\right] \\
+&=1-\prod_{i} \operatorname{Pr}\left[a_{i, t}^{j}(z)<\frac{c_{i, t}^{j} d_{n i, t}^{j}}{x}\right]=1-\prod_{i} \exp \left[-\left(\frac{c_{i, t}^{j} d_{n i, t}^{j}}{\gamma A_{i, t}^{j} x}\right)^{-\theta}\right] \\
+&=1-e^{-\Phi_{n, t}^{j}(\gamma x)^{\theta}}
+\end{aligned}
+\end{equation*}
+
+where:
+\begin{equation*}
+	\Phi_{n, t}^{j}=\sum_{i=1}^{\mathcal{N}}\left(\frac{c_{i, t}^{j} d_{n i, t}^{j}}{A_{i, t}^{j}}\right)^{-\theta}
+\end{equation*}
+
+We can use this distribution to simplify the integral in (A.15):
+\begin{equation*}
+	\lambda_{n, t}^{j}=\left(\int_{0}^{\infty} x^{-(\sigma-1)} d G_{n, t}^{j}(x)\right)^{-1 /(\sigma-1)}=\left(\Phi_{n, t}^{j}\right)^{-1 / \theta}
+\end{equation*}
+
+This expression for the shadow value of sector $j$ absorption is the same as that for the price index in Eaton and Kortum (2002). Following the derivation there, the fraction of goods for which country $i$ achieves the minimum in country $n$ is:
+\begin{equation*}
+\pi_{n i, t}^{j}=\frac{\left(c_{i, t}^{j} d_{n i, t} / A_{i, t}^{j}\right)^{-\theta}}{\Phi_{n, t}^{j}}=\left(\frac{c_{i, t}^{j} d_{n i, t}}{A_{i, t}^{j} \lambda_{n, t}^{j}}\right)^{-\theta}
+\end{equation*}
+
+We define the shadow value of all deliveries to country $n$ of sector $j$ goods from country $i$ as:
+\begin{equation*}
+	X_{n i, t}^{j}=\int_{0}^{1} \tilde{\lambda}_{n, t}^{j}(z) x_{n i, t}^{j}(z) d z
+\end{equation*}
+
+Since the distribution of $\tilde{\lambda}_{n, t}^{j}(z)$ is the same regardless of the country $i$ from which the goods are
+shipped and the fraction of goods shipped from $i$ is $\pi_{n i, t}^{j}$ :
+
+\begin{equation*}
+	X_{n i, t}^{j}=\pi_{n i, t}^{j} \int_{0}^{1} \tilde{\lambda}_{n, t}^{j}(z) x_{n, t}^{j}(z) d z=\pi_{n i, t}^{j} \int_{0}^{1} X_{n, t}^{j}(z) d z=\pi_{n i, t}^{j} X_{n, t}^{j}
+\end{equation*}
+
+Integrating over all sector $j$ goods produced in $n$, we define the value of production as:
+\begin{equation*}
+	Y_{n, t}^{j}=\int_{0}^{1} Y_{n, t}^{j}(z) d z
+\end{equation*}
+
+Summing across destinations, we can connect the value of production and the value of deliveries to each country:
+\begin{equation*}
+	Y_{n, t}^{j}=\sum_{m=1}^{\mathcal{N}} X_{m n, t}^{j}=\sum_{m=1}^{\mathcal{N}} \pi_{m n, t}^{j} X_{m, t}^{j}
+\end{equation*}
+
+
+\subsection{Consumption and Investment}
+The first-order condition for absorption $x_{n, t}^{j}$ of sector $j \in \Omega$ output in country $n$ at date $t$ is
+simply:
+\begin{equation*}
+	\tilde{\lambda}_{n, t}^{j}=\lambda_{n, t}^{j}
+\end{equation*}
+
+Henceforth we drop $\tilde{\lambda}_{n, t}^{j}$ and replace it with $\lambda_{n, t}^{j}$ in the expressions for consumption and investment.
+The first-order condition for consumption $C_{n, t}^{h}$ for $h \in \Omega_{K}^{*}$ can be written as:
+\begin{equation*}
+	\lambda_{n, t}^{h} C_{n . t}^{h}=\omega_{n} \phi_{n, t} \psi_{n, t}^{h}
+\end{equation*}
+
+while the first-order condition for household capital services $K_{n, t}^{H, D}$ gives:
+\begin{equation*}
+\lambda_{n, t}^{K} K_{n, t}^{H, D}=\omega_{n} \phi_{n, t} \psi^{D}_n
+\end{equation*}
+Turning to investment, the first-order condition for $I_{n, t}^{D}$ is:
+\begin{equation*}
+	\lambda_{n, t}^{V^{D}}=\frac{\lambda_{n, t}^{D}}{\alpha^{D} \chi_{n, t}^{D}}\left(\frac{I_{n, t}^{D}}{K_{n, t}^{D}}\right)^{1-\alpha^D}
+\end{equation*}
+
+In combination with the first-order condition for capital $K_{n, t+1}^{k}$
+\begin{equation*}
+	\lambda_{n, t}^{V^{D}}=\rho \lambda_{n, t+1}^{V^{D}}\left(\chi_{n, t+1}^{D}\left(1-\alpha^D\right)\left(\frac{I_{n, t+1}^{D}}{K_{n, t+1}^{D}}\right)^{\alpha^D}+\left(1-\delta^{D})\right)\right)+\rho \lambda_{n, t+1}^{K^{D}}
+\end{equation*}
+
+we get the Euler equation:
+\begin{equation*}
+	\frac{\lambda_{n, t}^{D}}{\alpha^D \chi_{n, t}^{D}}\left(\frac{I_{n, t}^{D}}{K_{n, t}^{D}}\right)^{1-\alpha^D}=\rho \frac{\lambda_{n, t+1}^{D}}{\alpha^D \chi_{n, t+1}^{D}}\left(\frac{I_{n, t+1}^{D}}{K_{n, t+1}^{D}}\right)^{1-\alpha^D}\left(\chi_{n, t+1}^{D}\left(1-\alpha^D\right)\left(\frac{I_{n, t+1}^{D}}{K_{n, t+1}^{D}}\right)^{\alpha^D}+\left(1-\delta^{D}\right)\right)+\rho \lambda_{n, t+1}^{K^{D}}
+\end{equation*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Computing the Competitive Equilibrium}\label{EQ}
+Replacing the relevant Lagrange multipliers with the corresponding competitive prices, we let $p_{n, t}^{j}=\lambda_{n, t}^{j}, w_{n, t}=\lambda_{n, t}^{L},$ and $r_{n, t}=\lambda_{n, t}^{K} .$ 
+
+\subsubsection{Prices and Trade Shares}
+The cost $c_{n, t}^{j}$ of a bundle of inputs in country $n$ for producing in sector $j$, combining labor, capital,
+and intermediates, is:
+\begin{equation*}
+	c_{n, t}^{j}=\left(w_{n, t}\right)^{\beta_{n}^{L, j}} \left(r_{n, t}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(p_{n, t}^{j^{\prime}}\right)^{\beta_{n}^{M, j j^{\prime}}}
+\end{equation*}
+
+while the associated price index for sector $j$ in country $n,$ combining production costs in each country is:
+\begin{equation*}
+	p_{n, t}^{j}=\left[\sum_{i=1}^{\mathcal{N}}\left(\frac{c_{i, t}^{j} d_{n i, t}^{j}}{A_{i, t}^{j}}\right)^{-\theta}\right]^{-1 / \theta}
+\end{equation*}
+
+The share of country $n$ 's absorption of sector $j$ imported from country $i$ is:
+\begin{equation*}
+\pi_{n i, t}^{j}=\left(\frac{c_{i, t}^{j} d_{n i, t}^{j}}{A_{i, t}^{j} p_{n, t}^{j}}\right)^{-\theta}
+\end{equation*}
+
+\subsubsection{Household Spending}
+Household spending on consumption of good $h \in \Omega_{K}^{*}$ is:
+\begin{equation*}
+p_{n, t}^{h} C_{n, t}^{h}=\omega_{n} \phi_{n, t} \psi_{n, t}^{h}
+\end{equation*}
+while household spending on capital $k \in \Omega_{K}$ is:
+\begin{equation*}
+r_{n, t} K_{n, t}^{H, D}=\omega_{n} \phi_{n, t} \psi^{D}_n
+\end{equation*}
+Summing these two expressions across all sectors and countries, our restriction on global aggregate demand shocks together with our normalization of the $\psi$'s implies that the value of world consumption is 1, which serves as our num\'eraire.
+
+\subsubsection{Investment}
+Investment in sector $D$ satisfies the Euler equation:
+\begin{equation*}
+	\frac{p_{n, t}^{D}}{\chi_{n, t}^{D}}\left(\frac{I_{n, t}^{D}}{K_{n, t}^{D}}\right)^{1-\alpha^D}=\rho \alpha^D\left[r_{n, t+1}+\frac{\left(1-\alpha^D\right) p_{n, t+1}^{D} I_{n, t+1}^{D}}{\alpha^D K_{n, t+1}^{D}}+\frac{\left(1-\delta^{D}\right) p_{n, t+1}^{D}}{\alpha^D \chi_{n, t+1}^{D}}\left(\frac{I_{n, t+1}^{D}}{K_{n, t+1}^{D}}\right)^{1-\alpha^D}\right]
+\end{equation*}
+
+The left-hand side is the sacrifice in period $t$ required to attain another unit of capital in period $t+1$. The right-hand side is the benefit of another unit of capital in period $t+1,$ both to rent out that period and to carry over to the future. 
+
+\subsubsection{Market Clearing}
+
+We define the value of country $n$'s spending on sector $j$ as $X_{n, t}^{j}=p_{n, t}^{j} x_{n, t}^{j}$. Defining $Y_{n, t}^{j}$ as the value of country $n$ 's gross production in sector $j,$ world goods-market clearing implies that:
+\begin{equation*}
+	Y_{n, t}^{j}=\sum_{m=1}^{\mathcal{N}} \pi_{m n, t}^{j} X_{m, t}^{j}
+\end{equation*}
+
+We denote final spending on sector $h$ in country $n$ as $X_{n, t}^{F, h} = p_{n, t}^{h} C_{n, t}^{h}$ for $h \in \Omega_{K}^{*}$ and $X_{n, t}^{F, D}=p_{n, t}^{D} I_{n, t}^{D}$ for sector $D$. Total spending on sector $j$ output is the sum of country $n$'s final spending on sector $j$ plus the use of sector $j$ output as intermediates by each sector $j^{\prime}$
+\begin{equation*}
+	X_{n, t}^{j}=X_{n, t}^{F, j}+\sum_{j^{\prime} \in \Omega} \beta^{M, j^{\prime} j} Y_{n, t}^{j^{\prime}}
+\end{equation*}
+
+Clearing in the market for country $n$ 's labor implies that labor income equals labor demand across sectors:
+\begin{equation*}
+	w_{n, t} L_{n, t}=\sum_{j \in \Omega} \beta_{n}^{L, j} Y_{n, t}^{j}
+\end{equation*}
+
+while clearing in the market for capital implies that:
+\begin{equation*}
+	r_{n, t} K_{n, t}^{D}=\sum_{j \in \Omega} \beta^{K, j D} Y_{n, t}^{j}+\frac{\psi^{D}_n}{1-\psi^{D}_n}\left(X_{n, t}^{F, N}+X_{n, t}^{F, S}\right)
+\end{equation*}
+
+We divide the exogenous variables of our model into those we treat as time-invariant parameters $\Theta$ and those we treat as time-varying shocks $\Psi_{t}:$
+$$
+\Theta=\left\{\rho, \theta, \alpha^D, \delta^{D}, \psi^{D}_n, \beta_{n}^{L, j}, \beta_{n}^{K, j D}, \beta_{n}^{M, j j^{\prime}}\right\} \quad \text { and } \quad \Psi_{t}=\left\{d_{n i, t}^{l}, A_{n, t}^{j}, \chi_{n, t}^{D}, \phi_{n, t}, \psi_{n, t}^{N}, L_{n, t} \right\}
+$$
+for $j, j^{\prime} \in \Omega, l \in \Omega_{T},$ and $n=1, \ldots, \mathcal{N} .$ (Since $\psi_{n, t}^{S}=1-\psi^{D}_n-\psi_{n, t}^{N},$ the demand
+shock for services is redundant.) The equations in section \ref{EQ} determine paths of the endogenous
+variables, which include wages $w_{n, t}$, rental rates $r_{n, t}$, trade shares $\pi_{n i, t}^{l}$ for sectors $l \in \Omega_{T},$ prices $p_{n, t}^{j},$ total spending $X_{n, t}^{j},$ final spending $X_{n, t}^{F, j},$ and output $Y_{n, t}^{j}$ for sectors $j \in \Omega .$ The state variables are the capital stocks $K_{n, t}^{D},$ which evolve according to
+\begin{equation*}
+	K_{n, t+1}^{D}=\chi_{n, t}^{D}\left(X_{n, t}^{F, D} / p_{n, t}^{D}\right)^{\alpha^D}\left(K_{n, t}^{D}\right)^{1-\alpha^D}+\left(1-\delta^{D}\right) K_{n, t}^{D}
+\end{equation*}
+
+ where $I_{n, t}^{D}=X_{n, t}^{F, D} / p_{n, t}^{D}$.
+
+
+
+\subsection{Relaxing Perfect Foresight}
+Note that in contrast to \cite{EKN2016}, we also explore a variant of the model where we relax the assumption of perfect foresight and embed rational expectations. In terms of equilibrium conditions, only the Euler equation will be affected and it reads as follows:
+%\begin{equation*}
+%	\frac{p_{n, t}^{D}}{\alpha^D \chi_{n, t}}\left(\frac{X_{n, t}^{D}}{p_{n, t}^{D} K_{n, t}}\right)^{1-\alpha^D}=\rho\mathbb{E}\left[ r_{n, t+1}  + \frac{p_{n, t+1}^{D}}{\alpha^D \chi_{n, t+1}}\left(\frac{X_{n, t+1}^{D}}{p_{n, t+1}^{D} K_{n, t+1}}\right)^{1-\alpha^D}\left[\chi_{n, t+1}(1-\alpha^D)\left(\frac{X_{n, t+1}^{D}}{p_{n, t+1}^{D} K_{n, t+1}}\right)^{\alpha^D}+(1-\delta)\right]\right]
+%\end{equation*}
+\begin{equation*}
+	\frac{p_{n, t}^{D}}{\chi_{n, t}^{D}}\left(\frac{I_{n, t}^{D}}{K_{n, t}^{D}}\right)^{1-\alpha^D}=\rho \alpha^D \mathbb{E}_t\left[r_{n, t+1}+\frac{\left(1-\alpha^D\right) p_{n, t+1}^{D} I_{n, t+1}^{D}}{\alpha^D K_{n, t+1}^{D}}+\frac{\left(1-\delta^{D}\right) p_{n, t+1}^{D}}{\alpha^D \chi_{n, t+1}^{D}}\left(\frac{I_{n, t+1}^{D}}{K_{n, t+1}^{D}}\right)^{1-\alpha^D}\right]
+\end{equation*}
+
+
+\section{Solution Method}
+
+
+\newpage
+\small
+\bibliographystyle{econ}
+\bibliography{BFVS}
+
+\clearpage\newpage
+
+\appendix
+\begin{center}
+	\Large
+	\textbf{APPENDIX}\\
+\end{center}
+
+\normalsize
+\section{Variables (\emph{code variables: states end with 'x', controls with 'y'})}
+
+\begin{enumerate}
+	\item The set of endogenous state variables has the following elements: \\
+	 $KD\_n\_t$\\
+	 CODE: KD\_n\_x ($>0$).
+	\item The set of exogenous state variables has the following elements (n: country index): \\
+	 $T^D_{n,t}$, $T^N_{n,t}$, $T^S_{n,t}$, $\phi_{n,t}$, $\psi_{n,t}^N$ \\
+	 CODE: $TD\_n\_x$, $TN\_n\_x$, $TS\_n\_x$, $phi\_n\_x$, $psi\_N\_x$ \\
+	 \item The set of control variables has the following elements (n: country index): \\
+	 $A_{n, t}^{D}$, $A_{n, t}^{N}$, $A_{n, t}^{S}$, $\psi_{n,t}^S$, $p^{h}_{n,t}$,
+	 $C^h_{n,t}$, $r_{n,t}$, $K^{H,D}_{n,t}$, $Y^D_{n,t}$, $Y^S_{n,t}$, $Y^N_{n,t}$, $w_{n,t}$, \\
+	 CODE: $AD\_n\_y$ ($>0$), $AN\_n\_y$ ($>0$), $AS\_n\_y$ ($>0$), 
+	 $psi\_S\_n\_y$ ($>0$), $p\_h\_n\_y$ ($>0$), $C\_h\_n\_y$ ($>0$), $r\_n\_y$ ($>0$), $K\_HD\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YN\_n\_y$ ($>0$), $w\_n_\_y$ ($>0$) \\
+\end{enumerate}
+
+
+
+OLD below
+
+\begin{enumerate}
+	\item The set of endogenous state variables has the following elements: \\
+	 $K\_n\_t$\\
+	 CODE: K\_n\_x ($>0$).
+	\item The set of exogenous state variables has the following elements (n: country index): \\
+	 $T^D_{n,t}$, $\phi_{n,t}$, $L_{n,t}$ (ignored for now, fixed to $1$),  $\chi_{n,t}$, $d_{ni,t}$ \\
+	 CODE: $TD\_n\_x$, $\phi\_n\_x$, $L\_n\_x$ (ignored for now, fixed to $1$) , $chi\_n\_x$, $d\_n\_i\_x$ (this last state is going to be a complicated state). \\
+	 \item The set of control variables has the following elements (n: country index): \\
+	 $A_{n, t}^{D}$, $Y^S_{n,t}$,$Y^D_{n,t}$,$Y_{n,t}$, $w_{n,t}$, $r_{n,t}$, $b_{n,t}$, $p^D_{n,t}$, $\pi^D_{ni,t}$, $K_{n,t+1}$, $X^D_{n,t}$...\\
+	 CODE: $AD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $Y\_n\_y$ ($>0$), 
+	 $w\_n_\_y$ ($>0$), $r\_n\_y$ ($>0$), $b\_n\_y$ ($>0$), $pD\_n\_y$ ($>0$), $piD\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $K\_n\_y$ (>0), $XD\_n_\_y$ (>0). \\
+\end{enumerate}
+
+
+
+\section{Equations}
+
+legend: \st{states in green} (given), \cl{controls in orange} (given by policy guess from current states), \stnext{next period's exogenous states in magenta} (to be integrated over), and \clnext{next period's controls in blue} (given by policy guess at next period's states), parameters are black\vspace{5mm}
+
+\noindent $N \times 3$ equations. Sectoral productivity (in code: {\bf{sectoral\_productivity}})
+\begin{equation}
+\cl{A_{n, t}^{j}}=(1 / \gamma)\left(\st{T_{n, t}^{j}}\right)^{1 / \theta}
+\end{equation}
+The $\cl{A^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{A_t}}$.
+
+\noindent $N$ equations {\bf{??? $3N??$}}.\\
+
+\noindent {\bf{$N \times 2$} ??? N?} equations. Household spending on consumption good of sector $S$ is (in code: {\bf{hh\_spending\_S}}) 
+
+\begin{equation}
+0 = \cl{p^h_{n,t}} \cl{C^h_{n,t}} - \omega_n \st{\phi_{n,t}} \cl{\psi_{n,t}^S}
+\end{equation}
+and for sector $N$ accordingly (in code: {\bf{hh\_spending\_N}})
+\begin{equation}
+0 = \cl{p^h_{n,t}} \cl{C^h_{n,t}} - \omega_n \st{\phi_{n,t}} \st{\psi_{n,t}^N}
+\end{equation}
+
+\noindent $N $ equations. Where (in code: {\bf{Psi\_S\_Def}})
+
+\begin{equation}
+\cl{\psi_{n,t}^S} = 1 - \psi^D_n - \st{\psi_{n,t}^N}
+\end{equation}
+
+\noindent $N $ equations. 
+
+Household spending on capital of sector $D$ is (in code: {\bf{hh\_spending\_cap\_D}})
+\begin{equation}
+0 = \cl{r_{n, t}} \cl{K_{n, t}^{H,D}} - \omega_n \st{\phi_{n,t}} \psi^D_n
+\end{equation}
+\noindent $N $ equations. 
+
+Wage (in code: {\bf{wage}})
+\begin{equation}
+0 = \cl{w_{n, t}} \st{L_{n, t}} -\sum_{j \in \Omega} \beta_{n}^{L, j} \cl{Y_{n, t}^{j}}
+\end{equation}
+The $\cl{w_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{w_t}}$.
+
+
+\noindent $N$ equations. Rental rate
+\begin{equation}
+  0 = \cl{r_{n, t}} \st{K_{n, t}^{D}}-\sum_{j \in \Omega} \beta^{K, j D} \cl{Y_{n, t}^{j}}+\frac{\psi^{D}_n} { 1-\psi^D_n }\left(\cl{X_{n, t}^{F, N}}+\cl{X_{n, t}^{F, S}}\right)
+\end{equation}
+The $\cl{r_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{r_t}}$.
+
+\noindent $N \times 3$ equations. The cost of a bundle of factors
+\begin{equation}
+0 = \cl{c_{n, t}^{j}}-\left(\cl{w_{n, t}}\right)^{\beta_{n}^{L, j}}\left(\cl{r_{n, t}}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(\cl{p_{n, t}^{j^{\prime}}}\right)^{\beta_{n}^{M, j,j^{\prime}}}
+\end{equation}
+The $\cl{c^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{C_t}}$.
+
+
+\noindent $N \times 2$ equations. The price index of the tradable sectors $l \in \{D,N\}$
+\begin{equation}
+0 = \cl{p^l_{n,t}} - \left(\sum^{N}_{i=1} \left( \frac{\cl{c^l_{i,t}} \st{d^l_{ni,t}}}{\cl{A_{i,t}^l}} \right)^{-\theta} \right)^{-\frac{1}{\theta}}
+\end{equation}
+The fraction of goods from tradable sector $l \in \{D,N\}$ that country $n$ obtains as imports from country $i$
+\begin{equation}
+0 = \cl{\pi^l_{ni,t}} - \left( \frac{\cl{c^l_{i,t}} \st{d^l_{ni,t}}}{\cl{p_{n,t}^l} \cl{A_{i,t}^l}} \right)^{-\theta}
+\end{equation}
+These fractions imported form a sector-specific $N \times N$ matrix $\mathbf{\cl{\Pi_t^l}}$.
+
+\noindent $N \times 2$ equations. The gross production of the tradable good in sector $l \in \{D,N\}$ in a country equals
+\begin{equation}
+0 = \mathbf{\cl{\Pi^l_t}}\mathbf{\cl{X^l_t}} -  \mathbf{\cl{Y^l_t}}
+\end{equation}
+
+\noindent $N$ equations. On the other hand, the gross production for the non-tradable good in sector $S$ in a country equals its absoprtion
+\begin{equation}
+0 = \mathbf{\cl{X^S_t}} -  \mathbf{\cl{Y^S_t}}
+\end{equation}
+
+\noindent $N \times 2$ equations. We define the value of country $n$'s final spending on sector $h \in \{S,N\}$ as 
+\begin{equation}
+0 = \cl{ X^{F,h}_{n,t}} - \cl{p^h_{n,t}} \cl{C^h_{n,t}}
+\end{equation}
+
+\noindent $N$ equations. We define the value of country $n$'s final spending on sector $D$ as 
+\begin{equation}
+0 = \cl{ X^{F,D}_{n,t}} - \cl{p^D_{n,t}} \cl{I^h_{n,t}}
+\end{equation}
+
+\noindent $N$ equations. Total spending on sector $j$ output is the sum of country $n^{\prime}$ s final spending on sector $j$
+plus the use of sector $j$ output as intermediates by each sector $j^{\prime}$
+\begin{equation}
+0 = \cl{X_{n, t}^{j}} - \cl{X_{n, t}^{F, j}} - \sum_{j^{\prime} \in \Omega} \beta^{M, j^{\prime} j} \cl{Y_{n, t}^{j^{\prime}}}
+\end{equation}
+
+\noindent $N$ equations. The law of motion of capital (multiply with p in code to avoid a singularity)
+\begin{equation}
+0 = \cl{K^D_{n,t+1}} - \st{\chi^D_{n,t}} \left( \frac{\cl{X_{n,t}^{F,D}}}{\cl{p_{n,t}^D}} \right)^{\alpha^D} \st{K^D_{n,t}}^{1-\alpha^D} - \left(1 - \delta^D\right) \st{K^D_{n,t}}
+\end{equation}
+
+\noindent $N$ equations. The Euler equations
+\begin{eqnarray}
+0 &=& \frac{\cl{p_{n, t}^{D}}}{\alpha^D \st{\chi^D_{n, t}}}\left(\frac{\cl{X_{n, t}^{F,D}}}{\cl{p_{n, t}^{D}} \st{K^D_{n, t}}}\right)^{1-\alpha^D} \\
+&-& \rho \frac{\cl{p_{n, t+1}^{D}}}{\alpha^D \st{\chi^D_{n, t+1}}}\left(\frac{\cl{X_{n, t+1}^{F,D}}}{\cl{p_{n, t+1}^{D}} \cl{K^D_{n, t+1}}}\right)^{1-\alpha^D}\left[\st{\chi^D_{n, t+1}}(1-\alpha^D)\left(\frac{\cl{X_{n, t+1}^{F,D}}}{\cl{p_{n, t+1}^{D}} \cl{K^D_{n, t+1}}}\right)^{\alpha^D}+(1-\delta^D)\right]-\rho \cl{r_{n, t+1}}\nonumber
+\end{eqnarray}
+
+\noindent $N$ equations. The Euler equations with rational expectations are:
+
+\begin{eqnarray}
+	0 &=& \frac{\cl{p_{n, t}^{D}}}{\alpha^D \st{\chi^D_{n, t}}}\left(\frac{\cl{X_{n, t}^{F,D}}}{\cl{p_{n, t}^{D}} \st{K^D_{n, t}}}\right)^{1-\alpha^D} \\
+	&-& \rho \mathbb{E}\left[\clnext{r_{n, t+1}} + \frac{\clnext{p_{n, t+1}^{D}}}{\alpha^D \stnext{\chi^D_{n, t+1}}}\left(\frac{\clnext{X_{n, t+1}^{F,D}}}{\clnext{p_{n, t+1}^{D}} \clnext{K^D_{n, t+1}}}\right)^{1-\alpha^D}\left[\stnext{\chi^D_{n, t+1}}(1-\alpha^D)\left(\frac{\clnext{X_{n, t+1}^{F,D}}}{\clnext{p_{n, t+1}^{D}} \clnext{K^D_{n, t+1}}}\right)^{\alpha^D}+(1-\delta^D)\right]\right]\nonumber 
+\end{eqnarray}
+
+
+
+\section{Laws of motion}
+
+\subsection{LoM for exogenous states}
+
+\noindent $N \times 3$ equations
+\begin{equation}
+\ln \st{T^D_{n,t}} = \rho_T \ln  \st{T^D_{n,t-1}} + \varepsilon_{Tn,t}    
+\end{equation}
+\noindent $N-1$ equations
+\begin{equation}
+\ln \st{\phi_{n,t}} = \rho_{\phi_n} \ln  \st{\phi_{n,t-1}} + \varepsilon_{\phi_n,t}  
+\end{equation}
+\noindent $1$ equation (is put as definition; one state less!)
+\begin{equation}
+\st{\phi_{N,t}} = N_{country} - \sum_{i=1}^{N-1} \st{\phi_{i,t}}
+\end{equation}
+\noindent $N$ equations
+\begin{equation}
+\ln \st{\chi^D_{n,t}} = \rho_{\chi^D_n} \ln  \st{\chi^D_{n,t-1}} + \varepsilon_{\chi^D_n,t}    
+\end{equation}
+\noindent $N \times (N-1) \times 2$ equations for $l \in \{S,N\}$
+\begin{equation}
+\ln \st{d^l_{ni,t}} = \left(1 - \rho_{d^l_{ni}} \right) \bar{d}^l_{ni} + \rho_{d^l_{ni}} \ln  \st{d^l_{ni,t-1}} + \varepsilon_{d^l_{ni},t}    
+\end{equation}
+\noindent $N$ equations (add those states to the definitions!)
+\begin{equation}
+\ln \st{d^l_{nn,t}} = 0  
+\end{equation}
+\noindent $N$ equations
+\begin{equation}
+\ln \st{L_{n,t}} = \left(1 - \rho_{L_{n}} \right) \bar{L}_{n} + \rho_{L_{n}} \ln  \st{L_{n,t-1}} + \varepsilon_{L_{n},t}    
+\end{equation}
+\noindent $N$ equations
+\begin{equation}
+	\st{\psi_{n,t}^N} =  \left(1 - \rho_{\psi_{n}} \right) \frac{1 - \psi^D_{n}}{2} + \rho_{\psi_{n}} \st{\psi_{n,t-1}^N} + \varepsilon_{\psi_{n},t}   
+\end{equation}
+
+
+\section{Steady State}
+
+%Solving for the steady-state in two steps: First, solve for steady state values of $K_n$ and $Y_n$ via the non-linear system of equations below. The system can be solved by minimizing the sum of the two error terms defined at the end:
+%
+%\noindent $N$ equations. Wage
+%\begin{equation}
+%w_{n} = \beta^L \frac{Y_{n}}{L_{n}}
+%\end{equation}
+%
+%\noindent $N$ equations. Rental rate
+%\begin{equation}
+% r_{n} = \beta^K \frac{Y_{n}}{K_{n}}
+%\end{equation}
+%
+%\noindent $N$ equations. Cost of a bundle of factors
+%\begin{equation}
+%b_{n}=\frac{Y_{n}}{B\left(L_{n}\right)^{\beta^{L}}\left(K_{n}\right)^{\beta^{K}}}
+%\end{equation}
+%where $B=\left(\beta^{L}\right)^{-\beta^{L}}\left(\beta^{K}\right)^{-\beta^{K}}$.
+%
+%\noindent $N$ equations. The price index of the durable (tradable) sector
+%\begin{equation}
+%p_{n}^{D}=\left(\sum_{i=1}^{\mathcal{N}}\left(\frac{b_{i} d_{n i}}{A_{i}^{D}}\right)^{-\theta}\right)^{-1 / \theta}
+%\end{equation}
+%
+%\noindent $N$ equations. The fraction of durable goods that country $n$ obtains as imports from country $i$
+%\begin{equation}
+%\pi_{n i}=\left(\frac{b_{i} d_{n i}}{p_{n}^{D} A_{i}^{D}}\right)^{-\theta}
+%\end{equation}
+%
+%\noindent $N$ equations. The absorption of the durable good in a country 
+%\begin{equation}
+%\mathbf{X^D_t} = \mathbf{\Pi_t}^{-1} \mathbf{Y^D_t}
+%\end{equation}
+%
+%\noindent $N$ equations $\rightarrow$ $N$ error terms
+%\begin{equation}
+%\left| \frac{\frac{X_{n}^{D}}{p_{n}^{D} K_{n}}}{\left(\frac{\delta}{\chi_{n}}\right)^{1 / \alpha^D}} - 1 \right| = error \ terms \ \ (= 0 \ \text{in theory})
+%\end{equation}
+%
+%\noindent $N$ equations $\rightarrow$ $N$ error terms
+%\begin{equation}
+%\left| \frac{X_{n}^{D}}{Y_{n}} - \beta^{K} \frac{\alpha^D \delta \rho}{1-\rho(1-\alpha^D \delta)} \right| = error \ terms \ \ (= 0 \ \text{in theory})
+%\end{equation}
+%
+%\noindent Second, use the steady state values of $K_n$ and $Y_n$ to calculate $w_n$, $r_n$, $b_n$, $p^D_n$, $\pi_{ni}$, and $X^D_n$.
+%
+%\section{Parameters}
+%\begin{equation*}
+%	\gamma=\left[\Gamma\left(\frac{\theta-\sigma+1}{\theta}\right)\right]^{-1 /(\sigma-1) \mid}
+%\end{equation*}
+%where $\Gamma$ is the Gamma function.
+%
+%\noindent Also note that $\theta > \sigma - 1$ and $\sum^N_{n=1} \omega_n = 1$ must hold.
+
+
+
+
+\section{Parameters}
+{\small
+\begin{center}
+	\begin{tabular}{ccc} 
+		\hline
+		\hline
+		Symbol (Code) & Parameter & Value \\ 
+		\hline
+		$N_{countries}$ (N\_{countries}) & & 2 \\ 		
+		$\theta$ (theta) & & 2 \\ 
+		$\sigma$ (sigma) & & 2.5 \\
+		$\sigma_{TDn,t}$ (sigma\_TDn) & & 0.01 \\
+		$\sigma_{TNn,t}$ (sigma\_TSn) & & 0.01 \\
+		$\sigma_{TSn,t}$ (sigma\_TNn) & & 0.01 \\
+		$\sigma_{\phi n,t}$ (sigma\_phi\_n) & & 0.02 \\				$\sigma_{\chi n,t}$ (sigma\_chi\_n) & & 0.01 \\
+                $\sigma_{d_{ni,t}}$ (sigma\_d\_n\_i) & & 0.01 \\
+                $\sigma_{L_{n,t}}$ (sigma\_L\_n) & & 0.01 \\
+                $\sigma_{\psi_{n,t}}$ (sigma\_psi\_n) & & 0.01 \\		                
+		$\forall n$: $\omega_n$ (omega\_n) & & 1/N\_{countries}\\
+		$\beta^{L,D}$ (betaL\_D) & & 2/3 ??? \\
+                $\beta^{L,N}$ (betaL\_N) & & 2/3 ???\\
+                $\beta^{L,S}$ (betaL\_S) & & 2/3 ??? \\                
+		$\beta^K$ (betaK) & & 1 - $\beta^L$ \\
+		$\delta$ (delta) & & 0.1 \\
+		$\forall j, j^{\prime} \in \Omega$: $\beta^{M, j j^{\prime}}$ & 6 $\times$ N parameters & 1/3\\
+ 		$\alpha^D$ (alpha) & & 0.55 \\ 
+		$\rho$ (rho) & & 0.95 \\ 
+		$\forall n$: $\rho_{TD_n}$ (rhoTD\_n) & & 0.85 \\ 
+		$\forall n$: $\rho_{TN_n}$ (rhoTN\_n) & & 0.85 \\ 
+		$\forall n$: $\rho_{TS_n}$ (rhoTS\_n) & & 0.85 \\ 		
+		$for \ n-1 \ countries$: $\rho_{\phi_n}$ (phi\_n) & & 0.85 \\ 
+		$\forall n$: $\rho_{\chi_n}$ (rhoChi\_n) & & 0.85 \\ 
+		$\forall n \ \& \ i$: $\bar{d}_{ni}$ (bar\_dni) & & 0.5 \\ 
+		$\forall n \ \& \ i$: $\rho_{d_{ni}}$ (rho\_dni) & & 0.85 \\ 		
+		$\forall n$: $d_{nn}$ (d\_nn) & & 1 \\ 
+		$\forall n$:  $\bar{L}_{n}$ (L\_n) & & 0 \\
+		$\psi^D_n$  & & 1/3 \\
+		$\rho_{\psi_n}$ (rho\_psi\_n)  & & 0.85 \\
+		\hline
+	\end{tabular}
+\end{center}
+
+
+\end{document}
