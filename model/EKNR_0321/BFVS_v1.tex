@@ -481,13 +481,14 @@ Note that in contrast to \cite{EKN2016}, we also explore a variant of the model 
 	 $KD\_n\_t$\\
 	 CODE: KD\_n\_x ($>0$).
 	\item The set of exogenous state variables has the following elements (n: country index): \\
-	 $T^D_{n,t}$, $T^N_{n,t}$, $T^S_{n,t}$, $\phi_{n,t}$, $\psi_{n,t}^N$ \\
-	 CODE: $TD\_n\_x$, $TN\_n\_x$, $TS\_n\_x$, $phi\_n\_x$, $psi\_N\_x$ \\
+	 $T^D_{n,t}$, $T^N_{n,t}$, $T^S_{n,t}$, $\phi_{n,t}$, $\psi_{n,t}^N$, $d^D_{ni,t}$, $d^N_{ni,t}$ \\
+	 CODE: $TD\_n\_x$, $TN\_n\_x$, $TS\_n\_x$, $phi\_n\_x$, $psi\_N\_x$, $dD\_n\_i\_x$ (this state is going to be a complicated state), $dN\_n\_i\_x$ (this state is going to be a complicated state) \\
+	 
 	 \item The set of control variables has the following elements (n: country index): \\
-	 $A_{n, t}^{D}$, $A_{n, t}^{N}$, $A_{n, t}^{S}$, $\psi_{n,t}^S$, $p^{h}_{n,t}$,
-	 $C^h_{n,t}$, $r_{n,t}$, $K^{H,D}_{n,t}$, $Y^D_{n,t}$, $Y^S_{n,t}$, $Y^N_{n,t}$, $w_{n,t}$, \\
+	 $A_{n, t}^{D}$, $A_{n, t}^{N}$, $A_{n, t}^{S}$, $\psi_{n,t}^S$, $p^{D}_{n,t}$, $p^{N}_{n,t}$, $p^{S}_{n,t}$, $C^h_{n,t}$, $r_{n,t}$, $K^{H,D}_{n,t}$, $Y^D_{n,t}$, $Y^S_{n,t}$, $Y^N_{n,t}$, $w_{n,t}$, $X^{F,N}_{n,t}$, $X^{F,S}_{n,t}$, $c^{D}_{n,t}$, $c^{N}_{n,t}$, $c^{S}_{n,t}$, $\pi^D_{ni,t}$, $\pi^N_{ni,t}$, $X^D_{n,t}$, $X^N_{n,t}$, $X^S_{n,t}$\\
+	 
 	 CODE: $AD\_n\_y$ ($>0$), $AN\_n\_y$ ($>0$), $AS\_n\_y$ ($>0$), 
-	 $psi\_S\_n\_y$ ($>0$), $p\_h\_n\_y$ ($>0$), $C\_h\_n\_y$ ($>0$), $r\_n\_y$ ($>0$), $K\_HD\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YN\_n\_y$ ($>0$), $w\_n_\_y$ ($>0$) \\
+	 $psi\_S\_n\_y$ ($>0$), $p\_D\_n\_y$ ($>0$), $p\_N\_n\_y$ ($>0$), $p\_S\_n\_y$ ($>0$), $C\_h\_n\_y$ ($>0$), $r\_n\_y$ ($>0$), $K\_HD\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YN\_n\_y$ ($>0$), $w\_n_\_y$ ($>0$), $XF\_N\_n_\_y$ (>0), $XF\_S\_n_\_y$ (>0), $cost\_D\_n_\_y$ (>0), $cost\_N\_n_\_y$ (>0), $cost\_S\_n_\_y$ (>0), $piD\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $piN\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $XD\_n_\_y$ (>0), $XN\_n_\_y$ (>0), $XS\_n_\_y$ (>0).   \\
 \end{enumerate}
 
 
@@ -524,11 +525,12 @@ The $\cl{A^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{A_t}}$
 \noindent {\bf{$N \times 2$} ??? N?} equations. Household spending on consumption good of sector $S$ is (in code: {\bf{hh\_spending\_S}}) 
 
 \begin{equation}
-0 = \cl{p^h_{n,t}} \cl{C^h_{n,t}} - \omega_n \st{\phi_{n,t}} \cl{\psi_{n,t}^S}
+0 = \cl{p^{h=S}_{n,t}} \cl{C^{h=S}_{n,t}} - \omega_n \st{\phi_{n,t}} \cl{\psi_{n,t}^S}
 \end{equation}
 and for sector $N$ accordingly (in code: {\bf{hh\_spending\_N}})
+
 \begin{equation}
-0 = \cl{p^h_{n,t}} \cl{C^h_{n,t}} - \omega_n \st{\phi_{n,t}} \st{\psi_{n,t}^N}
+0 = \cl{p^{h=N}_{n,t}} \cl{C^{h=N}_{n,t}} - \omega_n \st{\phi_{n,t}} \st{\psi_{n,t}^N}
 \end{equation}
 
 \noindent $N $ equations. Where (in code: {\bf{Psi\_S\_Def}})
@@ -552,30 +554,33 @@ Wage (in code: {\bf{wage}})
 The $\cl{w_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{w_t}}$.
 
 
-\noindent $N$ equations. Rental rate
+\noindent $N$ equations. Rental rate  (in code: {\bf{rental\_rate}}). {\bf{WHAT IS $\beta ...???$}}
 \begin{equation}
   0 = \cl{r_{n, t}} \st{K_{n, t}^{D}}-\sum_{j \in \Omega} \beta^{K, j D} \cl{Y_{n, t}^{j}}+\frac{\psi^{D}_n} { 1-\psi^D_n }\left(\cl{X_{n, t}^{F, N}}+\cl{X_{n, t}^{F, S}}\right)
 \end{equation}
 The $\cl{r_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{r_t}}$.
 
-\noindent $N \times 3$ equations. The cost of a bundle of factors
+\noindent $N \times 3$ equations. The cost of a bundle of factors (in code: {\bf{cost\_bundle\_D,N,S}})
 \begin{equation}
 0 = \cl{c_{n, t}^{j}}-\left(\cl{w_{n, t}}\right)^{\beta_{n}^{L, j}}\left(\cl{r_{n, t}}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(\cl{p_{n, t}^{j^{\prime}}}\right)^{\beta_{n}^{M, j,j^{\prime}}}
 \end{equation}
 The $\cl{c^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{C_t}}$.
 
 
-\noindent $N \times 2$ equations. The price index of the tradable sectors $l \in \{D,N\}$
+\noindent $N \times 2$ equations. The price index of the tradable sectors $l \in \{D,N\}$ (in code: {\bf{price\_index\_D,N}})
 \begin{equation}
 0 = \cl{p^l_{n,t}} - \left(\sum^{N}_{i=1} \left( \frac{\cl{c^l_{i,t}} \st{d^l_{ni,t}}}{\cl{A_{i,t}^l}} \right)^{-\theta} \right)^{-\frac{1}{\theta}}
 \end{equation}
-The fraction of goods from tradable sector $l \in \{D,N\}$ that country $n$ obtains as imports from country $i$
+
+The fraction of goods from tradable sector $l \in \{D,N\}$ that country $n$ obtains as imports from country $i$ (in code: {\bf{imports\_D,N}})
 \begin{equation}
 0 = \cl{\pi^l_{ni,t}} - \left( \frac{\cl{c^l_{i,t}} \st{d^l_{ni,t}}}{\cl{p_{n,t}^l} \cl{A_{i,t}^l}} \right)^{-\theta}
 \end{equation}
+
+
 These fractions imported form a sector-specific $N \times N$ matrix $\mathbf{\cl{\Pi_t^l}}$.
 
-\noindent $N \times 2$ equations. The gross production of the tradable good in sector $l \in \{D,N\}$ in a country equals
+\noindent $N \times 2$ equations. The gross production of the tradable good in sector $l \in \{D,N\}$ in a country equals (in code: {\bf{absoprtion\_D,N}})
 \begin{equation}
 0 = \mathbf{\cl{\Pi^l_t}}\mathbf{\cl{X^l_t}} -  \mathbf{\cl{Y^l_t}}
 \end{equation}
@@ -641,10 +646,12 @@ plus the use of sector $j$ output as intermediates by each sector $j^{\prime}$
 \begin{equation}
 \ln \st{\chi^D_{n,t}} = \rho_{\chi^D_n} \ln  \st{\chi^D_{n,t-1}} + \varepsilon_{\chi^D_n,t}    
 \end{equation}
-\noindent $N \times (N-1) \times 2$ equations for $l \in \{S,N\}$
+
+\noindent $N \times (N-1) \times 2$ equations for $l \in \{D,N\}$
 \begin{equation}
 \ln \st{d^l_{ni,t}} = \left(1 - \rho_{d^l_{ni}} \right) \bar{d}^l_{ni} + \rho_{d^l_{ni}} \ln  \st{d^l_{ni,t-1}} + \varepsilon_{d^l_{ni},t}    
 \end{equation}
+
 \noindent $N$ equations (add those states to the definitions!)
 \begin{equation}
 \ln \st{d^l_{nn,t}} = 0  
@@ -732,14 +739,17 @@ plus the use of sector $j$ output as intermediates by each sector $j^{\prime}$
 		$\sigma_{TNn,t}$ (sigma\_TSn) & & 0.01 \\
 		$\sigma_{TSn,t}$ (sigma\_TNn) & & 0.01 \\
 		$\sigma_{\phi n,t}$ (sigma\_phi\_n) & & 0.02 \\				$\sigma_{\chi n,t}$ (sigma\_chi\_n) & & 0.01 \\
-                $\sigma_{d_{ni,t}}$ (sigma\_d\_n\_i) & & 0.01 \\
+                $\sigma_{dD_{ni,t}}$ (sigma\_dD\_n\_i) & & 0.01 \\
+                $\sigma_{dN_{ni,t}}$ (sigma\_dN\_n\_i) & & 0.01 \\                
                 $\sigma_{L_{n,t}}$ (sigma\_L\_n) & & 0.01 \\
                 $\sigma_{\psi_{n,t}}$ (sigma\_psi\_n) & & 0.01 \\		                
 		$\forall n$: $\omega_n$ (omega\_n) & & 1/N\_{countries}\\
 		$\beta^{L,D}$ (betaL\_D) & & 2/3 ??? \\
                 $\beta^{L,N}$ (betaL\_N) & & 2/3 ???\\
                 $\beta^{L,S}$ (betaL\_S) & & 2/3 ??? \\                
-		$\beta^K$ (betaK) & & 1 - $\beta^L$ \\
+		$\beta^K$ (betaK\_D) & & 1 - $\beta^L_D$ ???\\
+		$\beta^K$ (betaK\_N) & & 1 - $\beta^L_S$ ???\\
+		$\beta^K$ (betaK\_S) & & 1 - $\beta^L_N$ ???\\		
 		$\delta$ (delta) & & 0.1 \\
 		$\forall j, j^{\prime} \in \Omega$: $\beta^{M, j j^{\prime}}$ & 6 $\times$ N parameters & 1/3\\
  		$\alpha^D$ (alpha) & & 0.55 \\ 
@@ -749,8 +759,10 @@ plus the use of sector $j$ output as intermediates by each sector $j^{\prime}$
 		$\forall n$: $\rho_{TS_n}$ (rhoTS\_n) & & 0.85 \\ 		
 		$for \ n-1 \ countries$: $\rho_{\phi_n}$ (phi\_n) & & 0.85 \\ 
 		$\forall n$: $\rho_{\chi_n}$ (rhoChi\_n) & & 0.85 \\ 
-		$\forall n \ \& \ i$: $\bar{d}_{ni}$ (bar\_dni) & & 0.5 \\ 
-		$\forall n \ \& \ i$: $\rho_{d_{ni}}$ (rho\_dni) & & 0.85 \\ 		
+		$\forall n \ \& \ i$: $\bar{d}_{ni}$ (bar\_dDni) & & 0.5 \\ 
+		$\forall n \ \& \ i$: $\bar{d}_{ni}$ (bar\_dNni) & & 0.5 \\ 		
+		$\forall n \ \& \ i$: $\rho_{d_{ni}}$ (rho\_dDni) & & 0.85 \\ 		
+                $\forall n \ \& \ i$: $\rho_{d_{ni}}$ (rho\_dNni) & & 0.85 \\ 		
 		$\forall n$: $d_{nn}$ (d\_nn) & & 1 \\ 
 		$\forall n$:  $\bar{L}_{n}$ (L\_n) & & 0 \\
 		$\psi^D_n$  & & 1/3 \\
