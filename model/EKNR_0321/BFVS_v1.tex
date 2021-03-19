@@ -46,7 +46,7 @@
 \newcommand{\stnext}[1]{{\color{magenta}{#1}}}
 \newcommand{\clnext}[1]{{\color{blue}{#1}}}
 \newcommand{\Ex}[2]{\mathbb{E}_{#1}\left[#2\right]}
-
+\newcommand{\fixmeLorenzo}[1]{\textbf{\emph{\textcolor{red}{/* check Lorenzo: #1 */}}}}
 
 
 \begin{document}
@@ -504,9 +504,9 @@ legend: \st{states in green} (given), \cl{controls in orange} (given by policy g
 \end{equation}
 The $\cl{A^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{A_t}}$.
 
-\noindent $N$ equations {\bf{??? $3N??$}}.\\
+\noindent $N$ equations {\fixmeLorenzo{??? what is this line here??}.\\
 
-\noindent {\bf{$N \times 2$} ??? N?} equations. Household spending on consumption good of sector $S$ is (in code: {\bf{hh\_spending\_S}}) 
+\noindent \fixmeLorenzo{$N \times 2$ -> should be N?} equations. Household spending on consumption good of sector $S$ is (in code: {\bf{hh\_spending\_S}}) 
 
 \begin{equation}
 0 = \cl{p^{h=S}_{n,t}} \cl{C^{h=S}_{n,t}} - \omega_n \st{\phi_{n,t}} \cl{\psi_{n,t}^S}
@@ -538,7 +538,7 @@ Wage (in code: {\bf{wage}})
 The $\cl{w_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{w_t}}$.
 
 
-\noindent $N$ equations. Rental rate  (in code: {\bf{rental\_rate}}). {\bf{WHAT IS $\beta ...???$}}
+\noindent $N$ equations. Rental rate  (in code: {\bf{rental\_rate}}). {\fixmeLorenzo{WHAT IS $\beta^{K, j D} ...$please check the parameter section at the end}}
 \begin{equation}
   0 = \cl{r_{n, t}} \st{K_{n, t}^{D}}-\sum_{j \in \Omega} \beta^{K, j D} \cl{Y_{n, t}^{j}}+\frac{\psi^{D}_n} { 1-\psi^D_n }\left(\cl{X_{n, t}^{F, N}}+\cl{X_{n, t}^{F, S}}\right)
 \end{equation}
@@ -548,7 +548,7 @@ The $\cl{r_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{r_t}}$.
 \begin{equation}
 0 = \cl{c_{n, t}^{j}}-\left(\cl{w_{n, t}}\right)^{\beta_{n}^{L, j}}\left(\cl{r_{n, t}}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(\cl{p_{n, t}^{j^{\prime}}}\right)^{\beta_{n}^{M, j,j^{\prime}}}
 \end{equation}
-The $\cl{c^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{C_t}}$.
+The $\cl{c^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{C_t}}$.\fixmeLorenzo{should $\mathbf{\cl{C_t}}$ not be denoted with a "small" c}
 
 
 \noindent $N \times 2$ equations. The price index of the tradable sectors $l \in \{D,N\}$ (in code: {\bf{price\_index\_D,N}})
