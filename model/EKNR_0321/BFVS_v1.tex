@@ -485,28 +485,12 @@ Note that in contrast to \cite{EKN2016}, we also explore a variant of the model 
 	 CODE: $TD\_n\_x$, $TN\_n\_x$, $TS\_n\_x$, $phi\_n\_x$, $psi\_N\_x$, $dD\_n\_i\_x$ (this state is going to be a complicated state), $dN\_n\_i\_x$ (this state is going to be a complicated state) \\
 	 
 	 \item The set of control variables has the following elements (n: country index): \\
-	 $A_{n, t}^{D}$, $A_{n, t}^{N}$, $A_{n, t}^{S}$, $\psi_{n,t}^S$, $p^{D}_{n,t}$, $p^{N}_{n,t}$, $p^{S}_{n,t}$, $C^h_{n,t}$, $r_{n,t}$, $K^{H,D}_{n,t}$, $Y^D_{n,t}$, $Y^S_{n,t}$, $Y^N_{n,t}$, $w_{n,t}$, $X^{F,N}_{n,t}$, $X^{F,S}_{n,t}$, $c^{D}_{n,t}$, $c^{N}_{n,t}$, $c^{S}_{n,t}$, $\pi^D_{ni,t}$, $\pi^N_{ni,t}$, $X^D_{n,t}$, $X^N_{n,t}$, $X^S_{n,t}$\\
+	 $A_{n, t}^{D}$, $A_{n, t}^{N}$, $A_{n, t}^{S}$, $\psi_{n,t}^S$, $p^{D}_{n,t}$, $p^{N}_{n,t}$, $p^{S}_{n,t}$, $C^h_{n,t}$, $r_{n,t}$, $K^{H,D}_{n,t}$, $Y^D_{n,t}$, $Y^S_{n,t}$, $Y^N_{n,t}$, $w_{n,t}$, $X^{F,N}_{n,t}$, $X^{F,S}_{n,t}$, $c^{D}_{n,t}$, $c^{N}_{n,t}$, $c^{S}_{n,t}$, $\pi^D_{ni,t}$, $\pi^N_{ni,t}$, $X^D_{n,t}$, $X^N_{n,t}$, $X^S_{n,t}$, $I^D_{n,t}$\\
 	 
 	 CODE: $AD\_n\_y$ ($>0$), $AN\_n\_y$ ($>0$), $AS\_n\_y$ ($>0$), 
-	 $psi\_S\_n\_y$ ($>0$), $p\_D\_n\_y$ ($>0$), $p\_N\_n\_y$ ($>0$), $p\_S\_n\_y$ ($>0$), $C\_h\_n\_y$ ($>0$), $r\_n\_y$ ($>0$), $K\_HD\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YN\_n\_y$ ($>0$), $w\_n_\_y$ ($>0$), $XF\_N\_n_\_y$ (>0), $XF\_S\_n_\_y$ (>0), $cost\_D\_n_\_y$ (>0), $cost\_N\_n_\_y$ (>0), $cost\_S\_n_\_y$ (>0), $piD\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $piN\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $XD\_n_\_y$ (>0), $XN\_n_\_y$ (>0), $XS\_n_\_y$ (>0).   \\
+	 $psi\_S\_n\_y$ ($>0$), $p\_D\_n\_y$ ($>0$), $p\_N\_n\_y$ ($>0$), $p\_S\_n\_y$ ($>0$), $C\_h\_n\_y$ ($>0$), $r\_n\_y$ ($>0$), $K\_HD\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YN\_n\_y$ ($>0$), $w\_n_\_y$ ($>0$), $XF\_N\_n_\_y$ (>0), $XF\_S\_n_\_y$ (>0), $cost\_D\_n_\_y$ (>0), $cost\_N\_n_\_y$ (>0), $cost\_S\_n_\_y$ (>0), $piD\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $piN\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $XD\_n_\_y$ (>0), $XN\_n_\_y$ (>0), $XS\_n_\_y$ (>0), $ID\_n_\_y$ (>0 ???? Eq. 18)   \\
 \end{enumerate}
 
-
-
-OLD below
-
-\begin{enumerate}
-	\item The set of endogenous state variables has the following elements: \\
-	 $K\_n\_t$\\
-	 CODE: K\_n\_x ($>0$).
-	\item The set of exogenous state variables has the following elements (n: country index): \\
-	 $T^D_{n,t}$, $\phi_{n,t}$, $L_{n,t}$ (ignored for now, fixed to $1$),  $\chi_{n,t}$, $d_{ni,t}$ \\
-	 CODE: $TD\_n\_x$, $\phi\_n\_x$, $L\_n\_x$ (ignored for now, fixed to $1$) , $chi\_n\_x$, $d\_n\_i\_x$ (this last state is going to be a complicated state). \\
-	 \item The set of control variables has the following elements (n: country index): \\
-	 $A_{n, t}^{D}$, $Y^S_{n,t}$,$Y^D_{n,t}$,$Y_{n,t}$, $w_{n,t}$, $r_{n,t}$, $b_{n,t}$, $p^D_{n,t}$, $\pi^D_{ni,t}$, $K_{n,t+1}$, $X^D_{n,t}$...\\
-	 CODE: $AD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $Y\_n\_y$ ($>0$), 
-	 $w\_n_\_y$ ($>0$), $r\_n\_y$ ($>0$), $b\_n\_y$ ($>0$), $pD\_n\_y$ ($>0$), $piD\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $K\_n\_y$ (>0), $XD\_n_\_y$ (>0). \\
-\end{enumerate}
 
 
 
@@ -585,39 +569,41 @@ These fractions imported form a sector-specific $N \times N$ matrix $\mathbf{\cl
 0 = \mathbf{\cl{\Pi^l_t}}\mathbf{\cl{X^l_t}} -  \mathbf{\cl{Y^l_t}}
 \end{equation}
 
-\noindent $N$ equations. On the other hand, the gross production for the non-tradable good in sector $S$ in a country equals its absoprtion
+\noindent $N$ equations. On the other hand, the gross production for the non-tradable good in sector $S$ in a country equals its absoprtion (in code: {\bf{gross-prod\_S}})
 \begin{equation}
 0 = \mathbf{\cl{X^S_t}} -  \mathbf{\cl{Y^S_t}}
 \end{equation}
 
-\noindent $N \times 2$ equations. We define the value of country $n$'s final spending on sector $h \in \{S,N\}$ as 
+\noindent $N \times 2$ equations. We define the value of country $n$'s final spending on sector $h \in \{S,N\}$ as (in code: {\bf{final\_spending\_S,N}}) 
 \begin{equation}
 0 = \cl{ X^{F,h}_{n,t}} - \cl{p^h_{n,t}} \cl{C^h_{n,t}}
 \end{equation}
 
-\noindent $N$ equations. We define the value of country $n$'s final spending on sector $D$ as 
+\noindent $N$ equations. We define the value of country $n$'s final spending on sector $D$ as  
+(in code: {\bf{final\_spending\_D}}) 
 \begin{equation}
 0 = \cl{ X^{F,D}_{n,t}} - \cl{p^D_{n,t}} \cl{I^h_{n,t}}
 \end{equation}
 
 \noindent $N$ equations. Total spending on sector $j$ output is the sum of country $n^{\prime}$ s final spending on sector $j$
-plus the use of sector $j$ output as intermediates by each sector $j^{\prime}$
+plus the use of sector $j$ output as intermediates by each sector $j^{\prime}$ (in code: {\bf{total\_spending\_D,N,S}}) 
+
 \begin{equation}
 0 = \cl{X_{n, t}^{j}} - \cl{X_{n, t}^{F, j}} - \sum_{j^{\prime} \in \Omega} \beta^{M, j^{\prime} j} \cl{Y_{n, t}^{j^{\prime}}}
 \end{equation}
 
-\noindent $N$ equations. The law of motion of capital (multiply with p in code to avoid a singularity)
+\noindent $N$ equations. The law of motion of capital (multiply with p in code to avoid a singularity) (in code: {\bf{law\_of\_motion\_D}}) 
 \begin{equation}
 0 = \cl{K^D_{n,t+1}} - \st{\chi^D_{n,t}} \left( \frac{\cl{X_{n,t}^{F,D}}}{\cl{p_{n,t}^D}} \right)^{\alpha^D} \st{K^D_{n,t}}^{1-\alpha^D} - \left(1 - \delta^D\right) \st{K^D_{n,t}}
 \end{equation}
 
-\noindent $N$ equations. The Euler equations
+\noindent $N$ equations. The Euler equations (in code: {\bf{EE}})
 \begin{eqnarray}
 0 &=& \frac{\cl{p_{n, t}^{D}}}{\alpha^D \st{\chi^D_{n, t}}}\left(\frac{\cl{X_{n, t}^{F,D}}}{\cl{p_{n, t}^{D}} \st{K^D_{n, t}}}\right)^{1-\alpha^D} \\
 &-& \rho \frac{\cl{p_{n, t+1}^{D}}}{\alpha^D \st{\chi^D_{n, t+1}}}\left(\frac{\cl{X_{n, t+1}^{F,D}}}{\cl{p_{n, t+1}^{D}} \cl{K^D_{n, t+1}}}\right)^{1-\alpha^D}\left[\st{\chi^D_{n, t+1}}(1-\alpha^D)\left(\frac{\cl{X_{n, t+1}^{F,D}}}{\cl{p_{n, t+1}^{D}} \cl{K^D_{n, t+1}}}\right)^{\alpha^D}+(1-\delta^D)\right]-\rho \cl{r_{n, t+1}}\nonumber
 \end{eqnarray}
 
-\noindent $N$ equations. The Euler equations with rational expectations are:
+\noindent $N$ equations. The Euler equations with rational expectations are (in code: {\bf{EE}}):
 
 \begin{eqnarray}
 	0 &=& \frac{\cl{p_{n, t}^{D}}}{\alpha^D \st{\chi^D_{n, t}}}\left(\frac{\cl{X_{n, t}^{F,D}}}{\cl{p_{n, t}^{D}} \st{K^D_{n, t}}}\right)^{1-\alpha^D} \\
