@@ -488,7 +488,7 @@ Note that in contrast to \cite{EKN2016}, we also explore a variant of the model 
 	 $A_{n, t}^{D}$, $A_{n, t}^{N}$, $A_{n, t}^{S}$, $\psi_{n,t}^S$, $p^{D}_{n,t}$, $p^{N}_{n,t}$, $p^{S}_{n,t}$, $C^h_{n,t}$, $r_{n,t}$, $K^{H,D}_{n,t}$, $Y^D_{n,t}$, $Y^S_{n,t}$, $Y^N_{n,t}$, $w_{n,t}$, $X^{F,N}_{n,t}$, $X^{F,S}_{n,t}$, $c^{D}_{n,t}$, $c^{N}_{n,t}$, $c^{S}_{n,t}$, $\pi^D_{ni,t}$, $\pi^N_{ni,t}$, $X^D_{n,t}$, $X^N_{n,t}$, $X^S_{n,t}$, $I^D_{n,t}$\\
 	 
 	 CODE: $AD\_n\_y$ ($>0$), $AN\_n\_y$ ($>0$), $AS\_n\_y$ ($>0$), 
-	 $psi\_S\_n\_y$ ($>0$), $p\_D\_n\_y$ ($>0$), $p\_N\_n\_y$ ($>0$), $p\_S\_n\_y$ ($>0$), $C\_h\_n\_y$ ($>0$), $r\_n\_y$ ($>0$), $K\_HD\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YN\_n\_y$ ($>0$), $w\_n_\_y$ ($>0$), $XF\_N\_n_\_y$ (>0), $XF\_S\_n_\_y$ (>0), $cost\_D\_n_\_y$ (>0), $cost\_N\_n_\_y$ (>0), $cost\_S\_n_\_y$ (>0), $piD\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $piN\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $XD\_n_\_y$ (>0), $XN\_n_\_y$ (>0), $XS\_n_\_y$ (>0), $ID\_n_\_y$ (>0 ???? Eq. 18)   \\
+	 $psi\_S\_n\_y$ ($>0$), $p\_D\_n\_y$ ($>0$), $p\_N\_n\_y$ ($>0$), $p\_S\_n\_y$ ($>0$), $C\_h\_n\_y$ ($>0$), $r\_n\_y$ ($>0$), $K\_HD\_n\_y$ ($>0$), $YD\_n\_y$ ($>0$), $YS\_n\_y$ ($>0$), $YN\_n\_y$ ($>0$), $w\_n_\_y$ ($>0$), $XF\_N\_n_\_y$ (>0), $XF\_S\_n_\_y$ (>0), $cost\_D\_n_\_y$ (>0), $cost\_N\_n_\_y$ (>0), $cost\_S\_n_\_y$ (>0), $piD\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $piN\_n\_i\_y$ ($\geq 0$; this policy is going to be a complicated one), $XD\_n_\_y$ (>0), $XN\_n_\_y$ (>0), $XS\_n_\_y$ (>0), $ID\_n_\_y$ (>0)   \\
 \end{enumerate}
 
 
@@ -504,9 +504,8 @@ legend: \st{states in green} (given), \cl{controls in orange} (given by policy g
 \end{equation}
 The $\cl{A^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{A_t}}$.
 
-\noindent $N$ equations {\fixmeLorenzo{??? what is this line here??}.\\
 
-\noindent \fixmeLorenzo{$N \times 2$ -> should be N?} equations. Household spending on consumption good of sector $S$ is (in code: {\bf{hh\_spending\_S}}) 
+$N$ equations. Household spending on consumption good of sector $S$ is (in code: {\bf{hh\_spending\_S}}) 
 
 \begin{equation}
 0 = \cl{p^{h=S}_{n,t}} \cl{C^{h=S}_{n,t}} - \omega_n \st{\phi_{n,t}} \cl{\psi_{n,t}^S}
@@ -538,7 +537,7 @@ Wage (in code: {\bf{wage}})
 The $\cl{w_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{w_t}}$.
 
 
-\noindent $N$ equations. Rental rate  (in code: {\bf{rental\_rate}}). {\fixmeLorenzo{WHAT IS $\beta^{K, j D} ...$please check the parameter section at the end}}
+\noindent $N$ equations. Rental rate  (in code: {\bf{rental\_rate}}). 
 \begin{equation}
   0 = \cl{r_{n, t}} \st{K_{n, t}^{D}}-\sum_{j \in \Omega} \beta^{K, j D} \cl{Y_{n, t}^{j}}+\frac{\psi^{D}_n} { 1-\psi^D_n }\left(\cl{X_{n, t}^{F, N}}+\cl{X_{n, t}^{F, S}}\right)
 \end{equation}
@@ -548,7 +547,7 @@ The $\cl{r_{n,t}}$ are organized in a $ N \times 1$ vector $\mathbf{\cl{r_t}}$.
 \begin{equation}
 0 = \cl{c_{n, t}^{j}}-\left(\cl{w_{n, t}}\right)^{\beta_{n}^{L, j}}\left(\cl{r_{n, t}}\right)^{\beta_{n}^{K, j D}} \prod_{j^{\prime} \in \Omega}\left(\cl{p_{n, t}^{j^{\prime}}}\right)^{\beta_{n}^{M, j,j^{\prime}}}
 \end{equation}
-The $\cl{c^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{C_t}}$.\fixmeLorenzo{should $\mathbf{\cl{C_t}}$ not be denoted with a "small" c}
+The $\cl{c^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{c_t}}$.
 
 
 \noindent $N \times 2$ equations. The price index of the tradable sectors $l \in \{D,N\}$ (in code: {\bf{price\_index\_D,N}})
@@ -730,14 +729,14 @@ plus the use of sector $j$ output as intermediates by each sector $j^{\prime}$ (
                 $\sigma_{L_{n,t}}$ (sigma\_L\_n) & & 0.01 \\
                 $\sigma_{\psi_{n,t}}$ (sigma\_psi\_n) & & 0.01 \\		                
 		$\forall n$: $\omega_n$ (omega\_n) & & 1/N\_{countries}\\
-		$\beta^{L,D}$ (betaL\_D) & & 2/3 ??? \\
-                $\beta^{L,N}$ (betaL\_N) & & 2/3 ???\\
-                $\beta^{L,S}$ (betaL\_S) & & 2/3 ??? \\                
-		$\beta^K$ (betaK\_D) & & 1 - $\beta^L_D$ ???\\
-		$\beta^K$ (betaK\_N) & & 1 - $\beta^L_S$ ???\\
-		$\beta^K$ (betaK\_S) & & 1 - $\beta^L_N$ ???\\		
+		$\beta^{L,D}$ (betaL\_D) & & 1/3  \\
+                $\beta^{L,N}$ (betaL\_N) & & 1/3 \\
+                $\beta^{L,S}$ (betaL\_S) & & 1/3  \\                
+		$\beta^{K,DD}$ (betaK\_D) & & 1/3\\
+		$\beta^{K,ND}$ (betaK\_N) & & 1/3\\
+		$\beta^{K,SD}$ (betaK\_S) & & 1/3\\		
 		$\delta$ (delta) & & 0.1 \\
-		$\forall j, j^{\prime} \in \Omega$: $\beta^{M, j j^{\prime}}$ & 6 $\times$ N parameters & 1/3\\
+		$\forall j, j^{\prime} \in \Omega$: $\beta^{M, j j^{\prime}}$ & 9 (3$\times$3 sectors) $\times$ N parameters & 1/9\\
  		$\alpha^D$ (alpha) & & 0.55 \\ 
 		$\rho$ (rho) & & 0.95 \\ 
 		$\forall n$: $\rho_{TD_n}$ (rhoTD\_n) & & 0.85 \\ 
