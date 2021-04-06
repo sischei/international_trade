@@ -152,7 +152,7 @@ where she takes as given the initial stocks of each type of capital in each coun
 &+\sum_{j \in \Omega} \int_{0}^{1} \tilde{\lambda}_{n, t}^{j}(z)\left(\sum_{i=1}^{\mathcal{N}} x_{n i, t}^{j}(z)-x_{n, t}^{j}(z)\right) d z \\
 &+\sum_{j \in \Omega} \lambda_{n, t}^{j}\left(\left(\int_{0}^{1} x_{n, t}^{j}(z)^{(\sigma-1) / \sigma} d z\right)^{\sigma /(\sigma-1)}-x_{n, t}^{j}\right) \\
 %&+\tilde{\lambda}_{n, t}^{S}\left[\left(\int_{0}^{1} y_{n, t}^{S}(z)^{(\sigma-1) / \sigma} d z\right)^{\sigma /(\sigma-1)} - \sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j S}(z) d z-C_{n, t}^{S}\right] \\
-&+\tilde{\lambda}_{n, t}^{N}\left(x_{n, t}^{N}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j N}(z) d z-C_{n, t}^{N}\right)+\tilde{\lambda}_{n, t}^{D}\left(x_{n, t}^{D}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j D}(z) d z-I_{n, t}^{D}\right) \\
+%&+\tilde{\lambda}_{n, t}^{N}\left(x_{n, t}^{N}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j N}(z) d z-C_{n, t}^{N}\right)+\tilde{\lambda}_{n, t}^{D}\left(x_{n, t}^{D}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j D}(z) d z-I_{n, t}^{D}\right) \\
 &+\sum_{h \in \Omega_K^{\star}}\tilde{\lambda}_{n, t}^{h}\left(x_{n, t}^{h}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j h}(z) d z-C_{n, t}^{h}\right)+\tilde{\lambda}_{n, t}^{D}\left(x_{n, t}^{D}-\sum_{j \in \Omega} \int_{0}^{1} M_{n, t}^{j D}(z) d z-I_{n, t}^{D}\right) \\
 &+\lambda_{n, t}^{V^D}\left(\chi_{n, t}^{D}\left(I_{n, t}^{D}\right)^{\alpha^D}\left(K_{n, t}^{D}\right)^{1-\alpha^{D}}+\left(1-\delta^{D}\right) K_{n, t}^{D}-K_{n, t+1}^{D}\right) \\
 &\left.+\sum_{j \in \Omega} \int_{0}^{1} \bar{\lambda}_{n, t}^{j}(z) y_{n, t}^{j}(z) d z+\sum_{j \in \Omega} \sum_{i=1}^{\mathcal{N}} \int_{0}^{1} \bar{\lambda}_{n i, t}^{j}(z) x_{n i, t}^{j}(z) d z\right]
@@ -266,9 +266,9 @@ X_{n, t}^{j}=\int_{0}^{1} X_{n, t}^{j}(z) d z
 \end{equation}
 
 Integrating both sides of \ref{eq:eq3} and applying \ref{eq:eq4} we also get:
-\begin{equation*}
+\begin{equation}\label{eq:integral}
 \lambda_{n, t}^{j}=\left(\int_{0}^{1} \tilde{\lambda}_{n, t}^{j}(z)^{-(\sigma-1)} d z\right)^{-1 /(\sigma-1)}
-\end{equation*}
+\end{equation}
 
 To obtain sharper results for aggregates we will need to exploit our assumption on the distribution of good-level production efficiency.
 
@@ -293,10 +293,16 @@ where:
 	\Phi_{n, t}^{j}=\sum_{i=1}^{\mathcal{N}}\left(\frac{c_{i, t}^{j} d_{n i, t}^{j}}{A_{i, t}^{j}}\right)^{-\theta}
 \end{equation*}
 
-We can use this distribution to simplify the integral in (A.15):
+We can use this distribution to simplify the integral in \ref{eq:integral}:
 \begin{equation*}
 	\lambda_{n, t}^{j}=\left(\int_{0}^{\infty} x^{-(\sigma-1)} d G_{n, t}^{j}(x)\right)^{-1 /(\sigma-1)}=\left(\Phi_{n, t}^{j}\right)^{-1 / \theta}
 \end{equation*}
+
+In the case of the non-tradeable service sector, $S$, this equation becomes:
+\begin{equation*}
+	\lambda_{n, t}^{S}=\left(\int_{0}^{\infty} x^{-(\sigma-1)} d G_{n, t}^{S}(x)\right)^{-1 /(\sigma-1)}=\left(\frac{c_{n,t}^S}{A^S_{n,t}}\right)^{-1 / \theta}
+\end{equation*}
+
 
 This expression for the shadow value of sector $j$ absorption is the same as that for the price index in Eaton and Kortum (2002). Following the derivation there, the fraction of goods for which country $i$ achieves the minimum in country $n$ is:
 \begin{equation*}
@@ -555,6 +561,10 @@ The $\cl{c^j_{n,t}}$ are organized in a $ N \times 3$ matrix $\mathbf{\cl{c_t}}$
 0 = \cl{p^l_{n,t}} - \left(\sum^{N}_{i=1} \left( \frac{\cl{c^l_{i,t}} \st{d^l_{ni,t}}}{\cl{A_{i,t}^l}} \right)^{-\theta} \right)^{-\frac{1}{\theta}}
 \end{equation}
 
+\noindent And $N$ equations for the service sector (in code: {\bf{price\_index\_S}})
+\begin{equation}
+0 = \cl{p^S_{n,t}} - \left(\frac{\cl{c_{n,t}^S}}{\cl{A^S_{n,t}}}\right)^{-1 / \theta}
+\end{equation}
 The fraction of goods from tradable sector $l \in \{D,N\}$ that country $n$ obtains as imports from country $i$ (in code: {\bf{imports\_D,N}})
 \begin{equation}
 0 = \cl{\pi^l_{ni,t}} - \left( \frac{\cl{c^l_{i,t}} \st{d^l_{ni,t}}}{\cl{p_{n,t}^l} \cl{A_{i,t}^l}} \right)^{-\theta}
